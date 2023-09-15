@@ -54,7 +54,7 @@ namespace Laboratory_1
 {
     internal class Program
     {
-        static private void CreateSet()
+        static private void TestCase_CreateSet()
         {
             Console.WriteLine("Task: Create a set from a list of elements, removing any duplicates");
             Console.WriteLine("Input: [1,2,2,3]");
@@ -64,7 +64,7 @@ namespace Laboratory_1
             
             Console.WriteLine($"Output: {set}\n\n");
         }
-        static private void AddElement()
+        static private void TestCase_AddElement()
         {
             Console.WriteLine("Task: Add an element to the set if it's not already present");
             Console.WriteLine("Input: [1,2,3], 4");
@@ -76,7 +76,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {set}\n\n");
         }
-        static private void RemoveElement()
+        static private void TestCase_RemoveElement()
         {
             Console.WriteLine("Task: Remove an element if it exists in the set");
             Console.WriteLine("Input: [1,2,3,4], 4");
@@ -88,7 +88,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {set}\n\n");
         }
-        static private void ContainsElement()
+        static private void TestCase_ContainsElement()
         {
             Console.WriteLine("Task: Return a boolean indicating if an element is present in the set");
             Console.WriteLine("Input: [1,2,3], 4");
@@ -99,7 +99,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {set.Contains(elementToFind)}\n\n");
         }
-        static private void Union()
+        static private void TestCase_Union()
         {
             Console.WriteLine("Task: Return a new set that's the union of the two sets");
             Console.WriteLine("Input: [1,2,3], [3,4,5]");
@@ -111,7 +111,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {union}\n\n");
         }
-        static private void Intersection()
+        static private void TestCase_Intersection()
         {
             Console.WriteLine("Task: Return a new set that's the intersection of the two sets");
             Console.WriteLine("Input: [1,2,3], [3,4,5]");
@@ -123,7 +123,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {intersection}\n\n");
         }
-        static private void Difference()
+        static private void TestCase_Difference()
         {
             Console.WriteLine("Task: Return a new set that's the intersection of the two sets");
             Console.WriteLine("Input: [1,2,3], [3,4,5]");
@@ -135,7 +135,7 @@ namespace Laboratory_1
 
             Console.WriteLine($"Output: {difference}\n\n");
         }
-        static private void Complement()
+        static private void TestCase_Complement()
         {
             Console.WriteLine("Task: Return the complement of setA in relation to a universal set");
             Console.WriteLine("Input: [1,2,3], [1,2,3,4,5]");
@@ -148,25 +148,16 @@ namespace Laboratory_1
             Console.WriteLine($"Output: {complement}\n\n");
         }
 
-        static private void Evaluate()
-        {
-
-        }
-        // Eval expression
-        // Separate by the space
-        // Find and extract keywords
-        // Now, first list is for set names and the second one is for set operations
-
         static void Main(string[] args)
         {
-            CreateSet();
-            AddElement();
-            RemoveElement();
-            ContainsElement();
-            Union();
-            Intersection();
-            Difference();
-            Complement();
+            TestCase_CreateSet();
+            TestCase_AddElement();
+            TestCase_RemoveElement();
+            TestCase_ContainsElement();
+            TestCase_Union();
+            TestCase_Intersection();
+            TestCase_Difference();
+            TestCase_Complement();
         }
     }
 }
