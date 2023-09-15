@@ -1,9 +1,9 @@
 ﻿namespace Laboratory_1
 {
-    internal struct Set<T>
+    internal class Set<T>
     {
         private List<T> _elements;
-        public List<T> Elements => new List<T>(_elements);
+        public IReadOnlyList<T> Elements => _elements;
         public Set(IEnumerable<T> elements)
         {
             _elements = new List<T>() { };

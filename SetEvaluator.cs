@@ -10,10 +10,6 @@ namespace Laboratory_1
     {
         public enum SetOperation
         {
-            Add,
-            Set,
-            Remove,
-            Contains,
             Union,
             Intersection,
             Difference,
@@ -25,14 +21,6 @@ namespace Laboratory_1
             operation.ToLower();
             switch (operation)
             {
-                case "add":
-                    return SetOperation.Add;
-                case "set":
-                    return SetOperation.Set;
-                case "remove":
-                    return SetOperation.Remove;
-                case "contains":
-                    return SetOperation.Contains;
                 case "union":
                     return SetOperation.Union;
                 case "intersection":
