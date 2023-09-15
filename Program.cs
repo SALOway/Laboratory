@@ -47,6 +47,9 @@ Tasks:
 
 // Ех... Тут би паттерн Команда
 
+using System.Collections.Generic;
+using System.Xml.Linq;
+
 namespace Laboratory_1
 {
     internal class Program

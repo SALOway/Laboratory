@@ -17,15 +17,58 @@
                 _elements.Add(newElement);
             }
         }
-        public void SetElements(IEnumerable<T> elements) => _elements = elements.Distinct().ToList();
+        public void SetElements(IEnumerable<T> elements)
+        {
+            _elements.Clear();
+            foreach (T element in elements)
+            {
+                AddElement(element);
+            }
+        }
         public void RemoveElement(T element) => _elements.Remove(element);
         public void Clear() => _elements.Clear();
         public bool Contains(T element) => _elements.Contains(element);
 
-        public Set<T> Union(Set<T> other) => new Set<T>(_elements.Union(other.Elements));
-        public Set<T> Intersection(Set<T> other) => new Set<T>(_elements.Intersect(other.Elements));
-        public Set<T> Difference(Set<T> other) => new Set<T>(_elements.Except(other.Elements));
-        public Set<T> Complement(Set<T> other) => Union(other).Difference(this);
+        public Set<T> Union(Set<T> other)
+        {
+            Set<T> union = new Set<T>(_elements);
+            foreach (T element in other.Elements)
+            {
+                if (!union.Contains(element))
+                {
+                    union.AddElement(element);
+                }
+            }
+            return union;
+        }
+        public Set<T> Intersection(Set<T> other)
+        {
+            Set<T> intersection = new Set<T>(new List<T>());
+            foreach (T element in other.Elements)
+            {
+                if (Contains(element))
+                {
+                    intersection.AddElement(element);
+                }
+            }
+            return intersection;
+        }
+        public Set<T> Difference(Set<T> other)
+        {
+            Set<T> difference = new Set<T>(_elements);
+            Set<T> intersection = Intersection(other);
+            foreach (T element in intersection.Elements)
+            {
+                difference.RemoveElement(element);
+            }
+            return difference;
+        }
+        public Set<T> Complement(Set<T> other)
+        {
+            Set<T> union = Union(other);
+            Set<T> complement = union.Difference(this);
+            return complement;
+        }
 
         public override string ToString()
         {
