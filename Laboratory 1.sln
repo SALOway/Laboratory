@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34003.232
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CDM-Laboratory-Work-1", "CDM-Laboratory-Work-1.csproj", "{E2CC2E6C-2980-4AAB-B071-674D730A667A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2CC2E6C-2980-4AAB-B071-674D730A667A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2CC2E6C-2980-4AAB-B071-674D730A667A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2CC2E6C-2980-4AAB-B071-674D730A667A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2CC2E6C-2980-4AAB-B071-674D730A667A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {379F0528-8E56-49FB-A6F1-B07FE3D2F0AF}
+	EndGlobalSection
+EndGlobal
