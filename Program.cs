@@ -43,9 +43,29 @@ Tasks:
             •	Expression: "A intersection B union C"
             •	setsDict = {'A': [1,2,3], 'B': [3,4,5], 'C': [5,6,7]}
         •	Output: [3,5,6,7]
- */
 
-// Ех... Тут би паттерн Команда
+
+Lab #2: "Cartesian Products and Relations"
+Objective: Understand and implement the Cartesian product of sets and related operations.
+    1.	Basic Cartesian Product (Score: 60-74)
+        •	cartesianProduct(setA, setB): Generates the Cartesian product of two sets.
+            •	Input: ([1,2], ['a','b'])
+            •	Output: [(1,'a'), (1,'b'), (2,'a'), (2,'b')]
+    2.	Relation Testing and Advanced Operations (Score: 75-89)
+        •	isRelationValid(relation, setA, setB): Validates if a given relation (list of ordered pairs) is valid for the Cartesian product of two sets.
+            •	Input: ([(1,'a'), (2,'b')], [1,2], ['a','b'])
+            •	Output: True
+        •	findRelations(setA, relationFunc): Finds all the relations for a given set based on a relation function.
+            •	Example function: "All numbers divisible by another number in the set".
+            •	Input: ([1,2,3,4,6], isDivisible)
+            •	Output: [(2,1), (4,1), (4,2), (6,1), (6,2), (6,3)]
+    3.	Advanced Cartesian Product with Filters (Score: 90-100)
+        •	filteredCartesianProduct(setA, setB, filterFunc): Generates the Cartesian product, but only includes pairs that satisfy the filter function.
+            •	Example function: "Only pairs where a number from setA is less than a number from setB".
+            •	Input: ([1,2,3], [3,4,5], filterFunction)
+            •	Output: [(1,3), (1,4), (1,5), (2,3), (2,4), (2,5)]
+
+ */
 
 using System.Collections.Generic;
 using System.Xml.Linq;
