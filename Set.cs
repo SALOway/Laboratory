@@ -1,4 +1,4 @@
-﻿namespace Laboratory_1
+﻿namespace Laboratory
 {
     class Set<T>
     {

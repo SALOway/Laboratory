@@ -66,7 +66,7 @@ Objective: Understand and implement the Cartesian product of sets and related op
             •	Output: [(1,3), (1,4), (1,5), (2,3), (2,4), (2,5)]
  */
 
-namespace Laboratory_1
+namespace Laboratory
 {
     class Program
     {
