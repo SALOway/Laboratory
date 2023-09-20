@@ -1,6 +1,6 @@
 ﻿namespace Laboratory_1
 {
-    internal class Set<T>
+    class Set<T>
     {
         private List<T> _elements = new List<T>();
         public IReadOnlyList<T> Elements => _elements;
@@ -33,8 +33,8 @@
 
         public Set<T> Union(Set<T> other)
         {
-            Set<T> union = new Set<T>(_elements);
-            foreach (T element in other.Elements)
+            var union = new Set<T>(_elements);
+            foreach (T element in other._elements)
             {
                 if (!union.Contains(element))
                 {
@@ -45,8 +45,8 @@
         }
         public Set<T> Intersection(Set<T> other)
         {
-            Set<T> intersection = new Set<T>(new List<T>());
-            foreach (T element in other.Elements)
+            var intersection = new Set<T>(new List<T>());
+            foreach (T element in other._elements)
             {
                 if (Contains(element))
                 {
@@ -57,9 +57,9 @@
         }
         public Set<T> Difference(Set<T> other)
         {
-            Set<T> difference = new Set<T>(_elements);
-            Set<T> intersection = Intersection(other);
-            foreach (T element in intersection.Elements)
+            var difference = new Set<T>(_elements);
+            var intersection = Intersection(other);
+            foreach (T element in intersection._elements)
             {
                 difference.RemoveElement(element);
             }
@@ -67,8 +67,8 @@
         }
         public Set<T> Complement(Set<T> other)
         {
-            Set<T> union = Union(other);
-            Set<T> complement = union.Difference(this);
+            var union = Union(other);
+            var complement = union.Difference(this);
             return complement;
         }
 
