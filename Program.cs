@@ -68,7 +68,7 @@ Objective: Understand and implement the Cartesian product of sets and related op
 
 namespace Laboratory_1
 {
-    internal class Program
+    class Program
     {
         static private void TestCase_CreateSet()
         {
@@ -76,7 +76,7 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,2,3]");
             Console.WriteLine("Expected output: [1,2,3]\n");
 
-            Set<int> set = new Set<int>(new int[] { 1, 2, 2, 3 });
+            var set = new Set<int>(new int[] { 1, 2, 2, 3 });
             
             Console.WriteLine($"Output: {set}\n\n");
         }
@@ -86,7 +86,7 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3], 4");
             Console.WriteLine("Expected output: [1,2,3,4]\n");
 
-            Set<int> set = new Set<int>(new int[] { 1, 2, 3 });
+            var set = new Set<int>(new int[] { 1, 2, 3 });
             int newElement = 4;
             set.AddElement(newElement);
 
@@ -98,7 +98,7 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3,4], 4");
             Console.WriteLine("Expected output: [1,2,3]\n");
 
-            Set<int> set = new Set<int>(new int[] { 1, 2, 3, 4 });
+            var set = new Set<int>(new int[] { 1, 2, 3, 4 });
             int elementToRemove = 4;
             set.RemoveElement(elementToRemove);
 
@@ -110,7 +110,7 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3], 4");
             Console.WriteLine("Expected output: False\n");
 
-            Set<int> set = new Set<int>(new int[] { 1, 2, 3 });
+            var set = new Set<int>(new int[] { 1, 2, 3 });
             int elementToFind = 4;
 
             Console.WriteLine($"Output: {set.Contains(elementToFind)}\n\n");
@@ -121,11 +121,11 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3], [3,4,5]");
             Console.WriteLine("Expected output: [1,2,3,4,5]\n");
 
-            Set<int> setA = new Set<int>(new int[] { 1, 2, 3 });
-            Set<int> setB = new Set<int>(new int[] { 3, 4, 5 });
-            Set<int> union = setA.Union(setB);
+            var setA = new Set<int>(new int[] { 1, 2, 3 });
+            var setB = new Set<int>(new int[] { 3, 4, 5 });
+            var unionSet = setA.Union(setB);
 
-            Console.WriteLine($"Output: {union}\n\n");
+            Console.WriteLine($"Output: {unionSet}\n\n");
         }
         static private void TestCase_Intersection()
         {
@@ -135,9 +135,9 @@ namespace Laboratory_1
 
             Set<int> setA = new Set<int>(new int[] { 1, 2, 3 });
             Set<int> setB = new Set<int>(new int[] { 3, 4, 5 });
-            Set<int> intersection = setA.Intersection(setB);
+            Set<int> intersectionSet = setA.Intersection(setB);
 
-            Console.WriteLine($"Output: {intersection}\n\n");
+            Console.WriteLine($"Output: {intersectionSet}\n\n");
         }
         static private void TestCase_Difference()
         {
@@ -145,11 +145,11 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3], [3,4,5]");
             Console.WriteLine("Expected output: [1,2]\n");
 
-            Set<int> setA = new Set<int>(new int[] { 1, 2, 3 });
-            Set<int> setB = new Set<int>(new int[] { 3, 4, 5 });
-            Set<int> difference = setA.Difference(setB);
+            var setA = new Set<int>(new int[] { 1, 2, 3 });
+            var setB = new Set<int>(new int[] { 3, 4, 5 });
+            var differenceSet = setA.Difference(setB);
 
-            Console.WriteLine($"Output: {difference}\n\n");
+            Console.WriteLine($"Output: {differenceSet}\n\n");
         }
         static private void TestCase_Complement()
         {
@@ -157,11 +157,11 @@ namespace Laboratory_1
             Console.WriteLine("Input: [1,2,3], [1,2,3,4,5]");
             Console.WriteLine("Expected output: [4,5]\n");
 
-            Set<int> setA = new Set<int>(new int[] { 1, 2, 3 });
-            Set<int> setB = new Set<int>(new int[] { 3, 4, 5 });
-            Set<int> complement = setA.Complement(setB);
+            var setA = new Set<int>(new int[] { 1, 2, 3 });
+            var setB = new Set<int>(new int[] { 3, 4, 5 });
+            var complementSet = setA.Complement(setB);
 
-            Console.WriteLine($"Output: {complement}\n\n");
+            Console.WriteLine($"Output: {complementSet}\n\n");
         }
 
         static void Main(string[] args)
