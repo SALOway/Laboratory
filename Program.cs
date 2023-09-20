@@ -64,11 +64,7 @@ Objective: Understand and implement the Cartesian product of sets and related op
             •	Example function: "Only pairs where a number from setA is less than a number from setB".
             •	Input: ([1,2,3], [3,4,5], filterFunction)
             •	Output: [(1,3), (1,4), (1,5), (2,3), (2,4), (2,5)]
-
  */
-
-using System.Collections.Generic;
-using System.Xml.Linq;
 
 namespace Laboratory_1
 {
