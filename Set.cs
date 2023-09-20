@@ -28,6 +28,7 @@
         public void RemoveElement(T element) => _elements.Remove(element);
         public void Clear() => _elements.Clear();
         public bool Contains(T element) => _elements.Contains(element);
+        public bool IsEqual(Set<T> other) => Difference(other).Elements.Count == 0;
 
         public Set<T> Union(Set<T> other)
         {
