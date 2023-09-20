@@ -2,7 +2,7 @@
 {
     internal class Set<T>
     {
-        private List<T> _elements;
+        private List<T> _elements = new List<T>();
         public IReadOnlyList<T> Elements => _elements;
         public Set(IEnumerable<T> elements)
         {
@@ -28,7 +28,8 @@
         public void RemoveElement(T element) => _elements.Remove(element);
         public void Clear() => _elements.Clear();
         public bool Contains(T element) => _elements.Contains(element);
-        public bool IsEqual(Set<T> other) => Difference(other).Elements.Count == 0;
+
+        public static bool AreEqual(Set<T> first, Set<T> second) => first.Equals(second);
 
         public Set<T> Union(Set<T> other)
         {
@@ -82,6 +83,31 @@
             }
             result += "]";
             return result;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var otherSet = (Set<T>)obj;
+
+            if (_elements.Count != otherSet._elements.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < _elements.Count; i++)
+            {
+                if (!EqualityComparer<T>.Default.Equals(_elements[i], otherSet._elements[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
