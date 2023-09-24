@@ -32,9 +32,7 @@
         public void RemoveElement(T element) => _elements.Remove(element);
         public void Clear() => _elements.Clear();
         public bool Contains(T element) => _elements.Contains(element);
-
         public static bool AreEqual(Set<T> first, Set<T> second) => first.Equals(second);
-
         public Set<T> Union(Set<T> other)
         {
             var union = new Set<T>(_elements);
@@ -49,7 +47,7 @@
         }
         public Set<T> Intersection(Set<T> other)
         {
-            var intersection = new Set<T>(new List<T>());
+            var intersection = new Set<T>();
             foreach (T element in other._elements)
             {
                 if (Contains(element))
@@ -69,13 +67,14 @@
             }
             return difference;
         }
-        public Set<T> Complement(Set<T> other)
         {
             var union = Union(other);
             var complement = union.Difference(this);
+        public Set<T> Complement(Set<T> universalSet)
+        {
+            var complement = universalSet.Difference(this);
             return complement;
         }
-
         public override string ToString()
         {
             string result = "[";
@@ -88,7 +87,6 @@
             result += "]";
             return result;
         }
-
         public override bool Equals(object? obj)
         {
             if (obj == null || GetType() != obj.GetType())
