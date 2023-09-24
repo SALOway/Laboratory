@@ -4,6 +4,10 @@
     {
         private List<T> _elements = new List<T>();
         public IReadOnlyList<T> Elements => _elements;
+        public Set()
+        {
+            _elements = new List<T>() { };
+        }
         public Set(IEnumerable<T> elements)
         {
             _elements = new List<T>() { };
