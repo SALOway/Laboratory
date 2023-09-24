@@ -184,7 +184,7 @@ namespace Laboratory
             Log();
         }
 
-        static public void EvaluateMedium()
+        static public void EvaluateMedium_1()
         {
             var input = "(A union B) intersection (C difference D) complement (E union F)";
             var sets = new Dictionary<string, Set<int>>();

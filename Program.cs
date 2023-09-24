@@ -82,8 +82,9 @@ namespace Laboratory
             Test.Complement();
             Test.EvaluateEasy_1();
             Test.EvaluateEasy_2();
-            Test.EvaluateMedium();
+            Test.EvaluateMedium_1();
         }
     }
 
 }
+
