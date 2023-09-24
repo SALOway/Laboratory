@@ -204,5 +204,26 @@ namespace Laboratory
             LogMessages[LogMessageType.Ouput] = set.ToString();
             Log();
         }
+
+        static public void EvaluateMedium_2()
+        {
+            var input = "(((A union B) intersection C) difference D) union (D complement (E union F))";
+            var sets = new Dictionary<string, Set<int>>();
+            sets["A"] = new Set<int>(new int[] { 1, 2, 3, 4 });
+            sets["B"] = new Set<int>(new int[] { 5, 8, 9, 6 });
+            sets["C"] = new Set<int>(new int[] { 4, 6, 7, 10 });
+            sets["D"] = new Set<int>(new int[] { 10, 4, 12, 5, 6 });
+            sets["E"] = new Set<int>(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
+            sets["F"] = new Set<int>(new int[] { 11, 12, 13, 14, 15, 16, 17, 18 });
+
+            var evaluator = new SetEvaluator<int>(sets);
+            var set = evaluator.Evaluate(input);
+
+            LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression (medium dificulty)";
+            LogMessages[LogMessageType.Input] = "\"(((A union B) intersection C) difference D) union (D complement (E union F))\"\nsetsDict = {\n'A': [1,2,3,4],\n'B': [5,8,9,6],\n'C': [4,6,7,10],\n'D': [10,4,12,5,6],\n'E': [1,2,3,4,5,6,7,8,9,10],\n'F': [11,12,13,14,15,16,17,18]\n}";
+            LogMessages[LogMessageType.ExpectedOutput] = "[1,2,3,7,8,9,11,13,14,15,16,17,18]";
+            LogMessages[LogMessageType.Ouput] = set.ToString();
+            Log();
+        }
     }
 }

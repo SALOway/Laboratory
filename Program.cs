@@ -83,6 +83,7 @@ namespace Laboratory
             Test.EvaluateEasy_1();
             Test.EvaluateEasy_2();
             Test.EvaluateMedium_1();
+            Test.EvaluateMedium_2();
         }
     }
 
