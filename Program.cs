@@ -70,110 +70,20 @@ namespace Laboratory
 {
     class Program
     {
-        static private void TestCase_CreateSet()
-        {
-            Console.WriteLine("Task: Create a set from a list of elements, removing any duplicates");
-            Console.WriteLine("Input: [1,2,2,3]");
-            Console.WriteLine("Expected output: [1,2,3]\n");
-
-            var set = new Set<int>(new int[] { 1, 2, 2, 3 });
-            
-            Console.WriteLine($"Output: {set}\n\n");
-        }
-        static private void TestCase_AddElement()
-        {
-            Console.WriteLine("Task: Add an element to the set if it's not already present");
-            Console.WriteLine("Input: [1,2,3], 4");
-            Console.WriteLine("Expected output: [1,2,3,4]\n");
-
-            var set = new Set<int>(new int[] { 1, 2, 3 });
-            int newElement = 4;
-            set.AddElement(newElement);
-
-            Console.WriteLine($"Output: {set}\n\n");
-        }
-        static private void TestCase_RemoveElement()
-        {
-            Console.WriteLine("Task: Remove an element if it exists in the set");
-            Console.WriteLine("Input: [1,2,3,4], 4");
-            Console.WriteLine("Expected output: [1,2,3]\n");
-
-            var set = new Set<int>(new int[] { 1, 2, 3, 4 });
-            int elementToRemove = 4;
-            set.RemoveElement(elementToRemove);
-
-            Console.WriteLine($"Output: {set}\n\n");
-        }
-        static private void TestCase_ContainsElement()
-        {
-            Console.WriteLine("Task: Return a boolean indicating if an element is present in the set");
-            Console.WriteLine("Input: [1,2,3], 4");
-            Console.WriteLine("Expected output: False\n");
-
-            var set = new Set<int>(new int[] { 1, 2, 3 });
-            int elementToFind = 4;
-
-            Console.WriteLine($"Output: {set.Contains(elementToFind)}\n\n");
-        }
-        static private void TestCase_Union()
-        {
-            Console.WriteLine("Task: Return a new set that's the union of the two sets");
-            Console.WriteLine("Input: [1,2,3], [3,4,5]");
-            Console.WriteLine("Expected output: [1,2,3,4,5]\n");
-
-            var setA = new Set<int>(new int[] { 1, 2, 3 });
-            var setB = new Set<int>(new int[] { 3, 4, 5 });
-            var unionSet = setA.Union(setB);
-
-            Console.WriteLine($"Output: {unionSet}\n\n");
-        }
-        static private void TestCase_Intersection()
-        {
-            Console.WriteLine("Task: Return a new set that's the intersection of the two sets");
-            Console.WriteLine("Input: [1,2,3], [3,4,5]");
-            Console.WriteLine("Expected output: [3]\n");
-
-            Set<int> setA = new Set<int>(new int[] { 1, 2, 3 });
-            Set<int> setB = new Set<int>(new int[] { 3, 4, 5 });
-            Set<int> intersectionSet = setA.Intersection(setB);
-
-            Console.WriteLine($"Output: {intersectionSet}\n\n");
-        }
-        static private void TestCase_Difference()
-        {
-            Console.WriteLine("Task: Return a new set that's the intersection of the two sets");
-            Console.WriteLine("Input: [1,2,3], [3,4,5]");
-            Console.WriteLine("Expected output: [1,2]\n");
-
-            var setA = new Set<int>(new int[] { 1, 2, 3 });
-            var setB = new Set<int>(new int[] { 3, 4, 5 });
-            var differenceSet = setA.Difference(setB);
-
-            Console.WriteLine($"Output: {differenceSet}\n\n");
-        }
-        static private void TestCase_Complement()
-        {
-            Console.WriteLine("Task: Return the complement of setA in relation to a universal set");
-            Console.WriteLine("Input: [1,2,3], [1,2,3,4,5]");
-            Console.WriteLine("Expected output: [4,5]\n");
-
-            var setA = new Set<int>(new int[] { 1, 2, 3 });
-            var setB = new Set<int>(new int[] { 3, 4, 5 });
-            var complementSet = setA.Complement(setB);
-
-            Console.WriteLine($"Output: {complementSet}\n\n");
-        }
-
         static void Main(string[] args)
         {
-            TestCase_CreateSet();
-            TestCase_AddElement();
-            TestCase_RemoveElement();
-            TestCase_ContainsElement();
-            TestCase_Union();
-            TestCase_Intersection();
-            TestCase_Difference();
-            TestCase_Complement();
+            Test.CreateSet();
+            Test.AddElement();
+            Test.RemoveElement();
+            Test.ContainsElement();
+            Test.Union();
+            Test.Intersection();
+            Test.Difference();
+            Test.Complement();
+            Test.EvaluateEasy_1();
+            Test.EvaluateEasy_2();
+            Test.EvaluateMedium();
         }
     }
+
 }
