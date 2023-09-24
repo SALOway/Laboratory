@@ -33,6 +33,19 @@
         public void Clear() => _elements.Clear();
         public bool Contains(T element) => _elements.Contains(element);
         public static bool AreEqual(Set<T> first, Set<T> second) => first.Equals(second);
+        public bool AreEqual(Set<T> other) => Equals(other);
+        public static Set<T> Union(Set<T> first, Set<T> second)
+        {
+            var union = new Set<T>(first._elements);
+            foreach (T element in second._elements)
+            {
+                if (!union.Contains(element))
+                {
+                    union.AddElement(element);
+                }
+            }
+            return union;
+        }
         public Set<T> Union(Set<T> other)
         {
             var union = new Set<T>(_elements);
@@ -44,6 +57,18 @@
                 }
             }
             return union;
+        }
+        public static Set<T> Intersection(Set<T> first, Set<T> second)
+        {
+            var intersection = new Set<T>();
+            foreach (T element in second._elements)
+            {
+                if (first.Contains(element))
+                {
+                    intersection.AddElement(element);
+                }
+            }
+            return intersection;
         }
         public Set<T> Intersection(Set<T> other)
         {
@@ -57,6 +82,16 @@
             }
             return intersection;
         }
+        public static Set<T> Difference(Set<T> first, Set<T> second)
+        {
+            var difference = new Set<T>(first._elements);
+            var intersection = first.Intersection(second);
+            foreach (T element in intersection._elements)
+            {
+                difference.RemoveElement(element);
+            }
+            return difference;
+        }
         public Set<T> Difference(Set<T> other)
         {
             var difference = new Set<T>(_elements);
@@ -67,9 +102,11 @@
             }
             return difference;
         }
+        public static Set<T> Complement(Set<T> set, Set<T> universalSet)
         {
-            var union = Union(other);
-            var complement = union.Difference(this);
+            var complement = universalSet.Difference(set);
+            return complement;
+        }
         public Set<T> Complement(Set<T> universalSet)
         {
             var complement = universalSet.Difference(this);
