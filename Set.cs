@@ -2,8 +2,7 @@
 {
     class Set<T>
     {
-        private List<T> _elements = new List<T>();
-        public IReadOnlyList<T> Elements => _elements;
+        private List<T> _elements;
         public Set()
         {
             _elements = new List<T>() { };
