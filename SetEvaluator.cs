@@ -7,7 +7,7 @@
         private Stack<string> _operations = new Stack<string>();
         private Stack<Set<T>> _values = new Stack<Set<T>>();
         private readonly Dictionary<string, Set<T>> _sets;
-        private readonly Dictionary<string, int> setOperators = new Dictionary<string, int>
+        private static readonly Dictionary<string, int> setOperators = new Dictionary<string, int>
         {
             { "(", 1},
             { ")", 1},
