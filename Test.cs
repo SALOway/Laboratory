@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Xml.Linq;
-
-namespace Laboratory
+﻿namespace Laboratory
 {
     class Test
     {
