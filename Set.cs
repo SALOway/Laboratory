@@ -1,66 +1,59 @@
 ﻿namespace Laboratory
 {
-    class Set<T>
+    class Set
     {
-        private List<T> _elements;
-        public Set()
+        private List<object> _elements = new List<object>() { };
+        public int Count => _elements.Count;
+        public Set() { }
+        public Set(IEnumerable<object> elements)
         {
-            _elements = new List<T>() { };
+            AddElements(elements);
         }
-        public Set(IEnumerable<T> elements)
+        public void AddElement(object element)
         {
-            _elements = new List<T>() { };
-            SetElements(elements);
-        }
-
-        public void AddElement(T newElement)
-        {
-            if (!Contains(newElement))
+            if (!Contains(element))
             {
-                _elements.Add(newElement);
+                _elements.Add(element);
             }
         }
-        public void SetElements(IEnumerable<T> elements)
+        public void AddElements(IEnumerable<object> elements)
         {
-            _elements.Clear();
-            foreach (T element in elements)
+            foreach (object element in elements)
             {
                 AddElement(element);
             }
         }
-        public void RemoveElement(T element) => _elements.Remove(element);
+        public void ReplaceElements(IEnumerable<object> elements)
+        {
+            _elements.Clear();
+            AddElements(elements);
+        }
+        public void RemoveElement(object element) => _elements.Remove(element);
         public void Clear() => _elements.Clear();
-        public bool Contains(T element) => _elements.Contains(element);
-        public static bool AreEqual(Set<T> first, Set<T> second) => first.Equals(second);
-        public bool AreEqual(Set<T> other) => Equals(other);
-        public static Set<T> Union(Set<T> first, Set<T> second)
+        public bool Contains(object element) => _elements.Contains(element);
+        public static bool ElementsAreEqual(Set first, Set second) => first.Count == second.Count && first._elements.SequenceEqual(second._elements);
+        public void Union(Set other) => AddElements(other._elements);
+        public static Set Union(Set first, Set second)
         {
-            var union = new Set<T>(first._elements);
-            foreach (T element in second._elements)
-            {
-                if (!union.Contains(element))
-                {
-                    union.AddElement(element);
-                }
-            }
+            var union = new Set(first._elements);
+            union.Union(second);
             return union;
         }
-        public Set<T> Union(Set<T> other)
+        public void Intersection(Set other)
         {
-            var union = new Set<T>(_elements);
-            foreach (T element in other._elements)
+            Clear();
+            foreach (object element in other._elements)
             {
-                if (!union.Contains(element))
+                if (Contains(element))
                 {
-                    union.AddElement(element);
+                    AddElement(element);
                 }
             }
-            return union;
         }
-        public static Set<T> Intersection(Set<T> first, Set<T> second)
+        public static Set Intersection(Set first, Set second)
         {
-            var intersection = new Set<T>();
-            foreach (T element in second._elements)
+            var intersection = new Set();
+            foreach (object element in second._elements)
             {
                 if (first.Contains(element))
                 {
@@ -69,83 +62,105 @@
             }
             return intersection;
         }
-        public Set<T> Intersection(Set<T> other)
+        public void Difference(Set other)
         {
-            var intersection = new Set<T>();
-            foreach (T element in other._elements)
+            var intersection = Intersection(this, other);
+            foreach (object element in intersection._elements)
             {
-                if (Contains(element))
-                {
-                    intersection.AddElement(element);
-                }
+                RemoveElement(element);
             }
-            return intersection;
         }
-        public static Set<T> Difference(Set<T> first, Set<T> second)
+        public static Set Difference(Set first, Set second)
         {
-            var difference = new Set<T>(first._elements);
-            var intersection = first.Intersection(second);
-            foreach (T element in intersection._elements)
+            var difference = new Set(first._elements);
+            var intersection = Intersection(first, second);
+            foreach (object element in intersection._elements)
             {
                 difference.RemoveElement(element);
             }
             return difference;
         }
-        public Set<T> Difference(Set<T> other)
+        public void Complement(Set universalSet) => _elements = Difference(universalSet, this)._elements;
+        public static Set Complement(Set set, Set universalSet) => Difference(universalSet, set);
+        public static Set CartesianProduct(Set first, Set second)
         {
-            var difference = new Set<T>(_elements);
-            var intersection = Intersection(other);
-            foreach (T element in intersection._elements)
+            var cartesianProduct = new Set();
+            foreach (var firstElement in first._elements)
             {
-                difference.RemoveElement(element);
-            }
-            return difference;
-        }
-        public static Set<T> Complement(Set<T> set, Set<T> universalSet)
-        {
-            var complement = universalSet.Difference(set);
-            return complement;
-        }
-        public Set<T> Complement(Set<T> universalSet)
-        {
-            var complement = universalSet.Difference(this);
-            return complement;
-        }
-        public override string ToString()
-        {
-            string result = "[";
-            for (int i = 0; i < _elements.Count; i++)
-            {
-                result += _elements[i];
-                if (i < _elements.Count - 1)
-                    result += ",";
-            }
-            result += "]";
-            return result;
-        }
-        public override bool Equals(object? obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var otherSet = (Set<T>)obj;
-
-            if (_elements.Count != otherSet._elements.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < _elements.Count; i++)
-            {
-                if (!EqualityComparer<T>.Default.Equals(_elements[i], otherSet._elements[i]))
+                foreach (var secondElement in second._elements)
                 {
-                    return false;
+                    cartesianProduct.AddElement((firstElement, secondElement));
                 }
             }
-
-            return true;
+            return cartesianProduct;
         }
+        public static Set CartesianProduct<T1, T2>(Set first, Set second, Func<T1,T2,bool> FilterFunction)
+        {
+            var cartesianProduct = new Set();
+            foreach (var firstElement in first._elements)
+            {
+                if (firstElement is not T1) continue;
+                foreach (var secondElement in second._elements)
+                {
+                    if (secondElement is not T2) continue;
+                    if (FilterFunction((T1)firstElement, (T2)secondElement))
+                    {
+                        cartesianProduct.AddElement((firstElement, secondElement));
+                    }
+                }
+            }
+            return cartesianProduct;
+        }
+        public void CartesianProduct(Set other)
+        {
+            Clear();
+            foreach (var firstElement in _elements)
+            {
+                foreach (var secondElement in other._elements)
+                {
+                    AddElement((firstElement, secondElement));
+                }
+            }
+        public void CartesianProduct<T1, T2>(Set other, Func<T1, T2, bool> FilterFunction)
+        {
+            Clear();
+            foreach (var firstElement in _elements)
+            {
+                if (firstElement is not T1) continue;
+                foreach (var secondElement in other._elements)
+                {
+                    if (secondElement is not T2) continue;
+                    if (FilterFunction((T1)firstElement, (T2)secondElement))
+                    {
+                        AddElement((firstElement, secondElement));
+                    }
+                }
+            }
+        public static bool IsRelationValid(Set relation, Set first, Set second) // relation is a set because list of ordered pairs can contains dublicates and it is easier to simply transform it to the Set
+        {
+            var cartesian = CartesianProduct(first, second);
+            return ElementsAreEqual(relation, cartesian);
+        }
+        public static Set FindRelations<T1, T2>(Set set, Func<T1, T2, bool> relationFunction)
+        {
+            var relation = new Set();
+            foreach (var firstElement in set._elements)
+            {
+                if (firstElement is not T1) continue;
+                foreach (var secondElement in set._elements)
+                {
+                    if (secondElement is not T2 || firstElement.Equals(secondElement)) continue;
+                    if (relationFunction((T1)firstElement, (T2)secondElement))
+                    {
+                        relation.AddElement((firstElement, secondElement));
+                    }
+                }
+            }
+            return relation;
+        }
+
+
+        public override string ToString() => "{ " + string.Join(", ", _elements) + " }";
+    }
     }
 }
