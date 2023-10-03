@@ -5,8 +5,8 @@
         bool _debug = false;
         private List<string> _tokens = new List<string>();
         private Stack<string> _operations = new Stack<string>();
-        private Stack<Set<T>> _values = new Stack<Set<T>>();
-        private readonly Dictionary<string, Set<T>> _sets;
+        private Stack<Set> _values = new Stack<Set>();
+        private readonly Dictionary<string, Set> _sets;
         private static readonly Dictionary<string, int> setOperators = new Dictionary<string, int>
         {
             { "(", 1},
@@ -16,7 +16,7 @@
             { "difference", 0},
             { "intersection", 0},
         };
-        public SetEvaluator(Dictionary<string, Set<T>> sets, bool debug = false)
+        public SetEvaluator(Dictionary<string, Set> sets, bool debug = false)
         {
             _sets = sets;
             _debug = debug;
@@ -61,29 +61,29 @@
             if (!string.IsNullOrEmpty(temp)) _tokens.Add(temp);
             return _tokens;
         }
-        private Set<T> Execute(string operation, Set<T> leftOperand, Set<T> rightOperand)
+        private Set Execute(string operation, Set leftOperand, Set rightOperand)
         {
-            var set = new Set<T>();
+            var set = new Set();
             switch (operation)
             {
                 case "union":
-                    set = Set<T>.Union(leftOperand, rightOperand);
+                    set = Set.Union(leftOperand, rightOperand);
                     break;
                 case "intersection":
-                    set = Set<T>.Intersection(leftOperand, rightOperand);
+                    set = Set.Intersection(leftOperand, rightOperand);
                     break;
                 case "difference":
-                    set = Set<T>.Difference(leftOperand, rightOperand);
+                    set = Set.Difference(leftOperand, rightOperand);
                     break;
                 case "complement":
-                    set = Set<T>.Complement(leftOperand, rightOperand);
+                    set = Set.Complement(leftOperand, rightOperand);
                     break;
             }
             return set;
         }
-        public Set<T> Evaluate(string input)
+        public Set Evaluate(string input)
         {
-            if (_sets.Count < 2) return new Set<T>();
+            if (_sets.Count < 2) return new Set();
             _tokens = ConvertToTokens(input);
             _operations.Clear();
             _values.Clear();
@@ -139,13 +139,13 @@
                 }
                 else
                 {
-                    if (_sets.TryGetValue(token, out Set<T> set))
+                    if (_sets.TryGetValue(token, out Set set))
                     {
                         _values.Push(set);
                     }
                     else
                     {
-                        return new Set<T>();
+                        return new Set();
                     }
                 }
             }
