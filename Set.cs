@@ -279,5 +279,11 @@
 
         public override string ToString() => "{ " + string.Join(", ", _elements) + " }";
     }
+    /// <summary>
+    /// Provides the ability to initialize the set with elements of a specific type T by performing type casting
+    /// </summary>
+    class Set<T> : Set
+    {
+        public Set(IEnumerable<T> elements) : base(elements.Cast<object>()) { }
     }
 }
