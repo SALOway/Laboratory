@@ -1,4 +1,6 @@
-﻿namespace Laboratory
+﻿using System.Collections;
+
+namespace Laboratory
 {
     /// <summary>
     /// Represents a collection of unique objects and provides methods to perform basic set operations such as union, intersection, and difference
@@ -8,7 +10,7 @@
         private List<object> _elements = new List<object>() { };
         public int Count => _elements.Count;
         public Set() { }
-        public Set(IEnumerable<object> elements)
+        public Set(IEnumerable elements)
         {
             AddElements(elements);
         }
@@ -27,7 +29,7 @@
         /// Adds elements to the set. Existing elements in the set will not be duplicated
         /// </summary>
         /// <param name="elements">The new elements to add to the set</param>
-        public void AddElements(IEnumerable<object> elements)
+        public void AddElements(IEnumerable elements)
         {
             foreach (object element in elements)
             {
@@ -38,7 +40,7 @@
         /// Replaces all elements in the set with the specified new elements
         /// </summary>
         /// <param name="elements">The new elements to replace the existing ones in the set</param>
-        public void ReplaceElements(IEnumerable<object> elements)
+        public void ReplaceElements(IEnumerable elements)
         {
             _elements.Clear();
             AddElements(elements);
@@ -278,12 +280,5 @@
 
 
         public override string ToString() => "{ " + string.Join(", ", _elements) + " }";
-    }
-    /// <summary>
-    /// Provides the ability to initialize the set with elements of a specific type T by performing type casting
-    /// </summary>
-    class Set<T> : Set
-    {
-        public Set(IEnumerable<T> elements) : base(elements.Cast<object>()) { }
     }
 }
