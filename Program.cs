@@ -58,7 +58,7 @@ Objective: Understand and implement the Cartesian product of sets and related op
         •	findRelations(setA, relationFunc): Finds all the relations for a given set based on a relation function.
             •	Example function: "All numbers divisible by another number in the set".
             •	Input: ([1,2,3,4,6], isDivisible)
-            •	Output: [(2,1), (4,1), (4,2), (6,1), (6,2), (6,3)]
+            •	Output: [(2,1), (3,1), (4,1), (4,2), (6,1), (6,2), (6,3)]
     3.	Advanced Cartesian Product with Filters (Score: 90-100)
         •	filteredCartesianProduct(setA, setB, filterFunc): Generates the Cartesian product, but only includes pairs that satisfy the filter function.
             •	Example function: "Only pairs where a number from setA is less than a number from setB".
