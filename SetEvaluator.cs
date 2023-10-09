@@ -89,13 +89,7 @@
             _values.Clear();
             foreach (string token in _tokens)
             {
-                if (_debug)
-                {
-                    Console.WriteLine("Current token: " + token);
-                    Console.WriteLine("Current operations: " + "{" + string.Join(", ", _operations) + "}");
-                    Console.WriteLine("Current values: " + "{" + string.Join(", ", _values) + "}");
-                    Console.WriteLine();
-                }
+                if (_debug) Log(token);
                 if (setOperators.ContainsKey(token))
                 {
                     if (token == ")")
@@ -159,6 +153,13 @@
             }
 
             return _values.Pop();
+        }
+        private void Log(string token)
+        {
+            Console.WriteLine("Current token: " + token);
+            Console.WriteLine("Current operations: " + "{" + string.Join(", ", _operations) + "}");
+            Console.WriteLine("Current values: " + "{" + string.Join(", ", _values) + "}");
+            Console.WriteLine();
         }
     }
 }

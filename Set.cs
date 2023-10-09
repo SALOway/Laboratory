@@ -91,14 +91,15 @@ namespace Laboratory
         /// <param name="other">The set to intersect with</param>
         public void Intersection(Set other)
         {
-            Clear();
+            var intersection = new List<object>();
             foreach (object element in other._elements)
             {
                 if (Contains(element))
                 {
-                    AddElement(element);
+                    intersection.Add(element);
                 }
             }
+            ReplaceElements(intersection);
         }
         /// <summary>
         /// Computes the intersection of two sets and returns a new set containing the common elements
@@ -277,8 +278,6 @@ namespace Laboratory
             }
             return relation;
         }
-
-
         public override string ToString() => "{ " + string.Join(", ", _elements) + " }";
     }
 }

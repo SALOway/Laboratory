@@ -74,24 +74,13 @@ namespace Laboratory
         {
             return a % b == 0;
         }
-        public static bool IsLess(int a, int b) 
+        public static bool IsLess(decimal a, decimal b) 
         {
             return a < b;
         }
         static void Main(string[] args)
         {
-            Test.CreateSet();
-            Test.AddElement();
-            Test.RemoveElement();
-            Test.ContainsElement();
-            Test.Union();
-            Test.Intersection();
-            Test.Difference();
-            Test.Complement();
-            Test.EvaluateEasy_1();
-            Test.EvaluateEasy_2();
-            Test.EvaluateMedium_1();
-            Test.EvaluateMedium_2();
+            Test.RunAll();
         }
     }
 
