@@ -258,16 +258,37 @@ namespace Laboratory
             _elements = CartesianProduct(this, other, FilterFunction)._elements;
         }
         /// <summary>
+        /// Checks if a given relation is valid by comparing it to the Cartesian product of this and other sets
+        /// </summary>
+        /// <param name="relation">The relation to be checked for validity</param>
+        /// <param name="other">The other set involved in the Cartesian product</param>
+        /// <returns>True if the relation is the subset of Cartesian product; otherwise, false</returns>
+        public bool IsRelationValid(Set relation, Set other) // relation is a set because list of ordered pairs can contains dublicates and it is easier to simply transform it to the Set
+        {
+            var cartesianProduct = CartesianProduct(this, other);
+            foreach (var relationPair in relation._elements)
+            {
+                if (!cartesianProduct.Contains(relationPair)) return false;
+            }
+            return true;
+        }
+        /// <summary>
         /// Checks if a given relation is valid by comparing it to the Cartesian product of two sets
         /// </summary>
         /// <param name="relation">The relation to be checked for validity</param>
         /// <param name="first">The first set involved in the Cartesian product</param>
         /// <param name="second">The second set involved in the Cartesian product</param>
-        /// <returns>True if the relation is valid; otherwise, false</returns>
+        /// <returns>True if the relation is the subset of Cartesian product; otherwise, false</returns>
         public static bool IsRelationValid(Set relation, Set first, Set second) // relation is a set because list of ordered pairs can contains dublicates and it is easier to simply transform it to the Set
         {
-            var cartesian = CartesianProduct(first, second);
-            return ElementsAreEqual(relation, cartesian);
+            var cartesianProduct = CartesianProduct(first, second);
+
+            foreach (var relationPair in relation._elements)
+            {
+                if (!cartesianProduct.Contains(relationPair)) return false;
+            }
+            return true;
+        }
         }
         /// <summary>
         /// Finds relations within a set of elements by applying a relation function
