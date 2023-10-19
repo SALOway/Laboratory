@@ -263,6 +263,24 @@
             LogMessages[LogMessageType.Output] = setA.ToString();
             Log();
         }
+        static public void IsRelationValid()
+        {
+            var relation = new (int, char)[] { (1, 'a'), (2, 'b') };
+            var arrayA = new int[] { 1, 2 };
+            var arrayB = new char[] { 'a', 'b' };
+            var relationSet = new Set(relation);
+            var setA = new Set(arrayA);
+            var setB = new Set(arrayB);
+            var isRelationValidStatic = Set.IsRelationValid(relationSet, setA, setB);
+            var isRelationValid = setA.IsRelationValid(relationSet, setB);
+
+            LogMessages[LogMessageType.Task] = "Given two sets, compute the cartesian product";
+            LogMessages[LogMessageType.Input] = $"{relationSet} , [ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
+            LogMessages[LogMessageType.ExpectedOutput] = true.ToString();
+            LogMessages[LogMessageType.OutputStatic] = isRelationValidStatic.ToString();
+            LogMessages[LogMessageType.Output] = isRelationValid.ToString();
+            Log();
+        }
 
 
         public static void RunAll()
