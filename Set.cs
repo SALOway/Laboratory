@@ -209,14 +209,7 @@ namespace Laboratory
         /// <param name="other">The other set to compute the Cartesian product with</param>
         public void CartesianProduct(Set other)
         {
-            Clear();
-            foreach (var firstElement in _elements)
-            {
-                foreach (var secondElement in other._elements)
-                {
-                    AddElement((firstElement, secondElement));
-                }
-            }
+            _elements = CartesianProduct(this, other)._elements;
         }
         /// <summary>
         /// Computes the Cartesian product of this set with another set, applying a filter function to include only pairs that satisfy the specified criteria, and replaces the current contents with the result
@@ -227,19 +220,7 @@ namespace Laboratory
         /// <param name="FilterFunction">A function that defines the filtering criteria for pairs of elements from the two sets</param>
         public void CartesianProduct<T1, T2>(Set other, Func<T1, T2, bool> FilterFunction)
         {
-            Clear();
-            foreach (var firstElement in _elements)
-            {
-                if (firstElement is not T1) continue;
-                foreach (var secondElement in other._elements)
-                {
-                    if (secondElement is not T2) continue;
-                    if (FilterFunction((T1)firstElement, (T2)secondElement))
-                    {
-                        AddElement((firstElement, secondElement));
-                    }
-                }
-            }
+            _elements = CartesianProduct(this, other, FilterFunction)._elements;
         }
         /// <summary>
         /// Checks if a given relation is valid by comparing it to the Cartesian product of two sets
