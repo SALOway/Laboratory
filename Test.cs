@@ -241,6 +241,28 @@
             LogMessages[LogMessageType.Ouput] = set.ToString();
             Log();
         }
+        /*
+                 •	cartesianProduct(setA, setB): Generates the Cartesian product of two sets.
+            •	Input: ([1,2], ['a','b'])
+            •	Output: [(1,'a'), (1,'b'), (2,'a'), (2,'b')]
+         */
+        static public void CartesianProduct()
+        {
+            var arrayA = new int[] { 1, 2 };
+            var arrayB = new char[] { 'a', 'b' };
+            var setA = new Set(arrayA);
+            var setB = new Set(arrayB);
+            var cartesianSet = Set.CartesianProduct(setA, setB);
+            setA.CartesianProduct(setB);
+
+            LogMessages[LogMessageType.Task] = "Given two sets, compute the cartesian product";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
+            LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, char)[] { (1, 'a'), (1, 'b'), (2, 'a'), (2, 'b') }).ToString();
+            LogMessages[LogMessageType.OutputStatic] = cartesianSet.ToString();
+            LogMessages[LogMessageType.Ouput] = setA.ToString();
+            Log();
+        }
+
 
         public static void RunAll()
         {
@@ -256,6 +278,7 @@
             EvaluateEasy_2();
             EvaluateMedium_1();
             EvaluateMedium_2();
+            CartesianProduct();
         }
     }
 }
