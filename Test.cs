@@ -312,6 +312,8 @@
             EvaluateMedium_1();
             EvaluateMedium_2();
             CartesianProduct();
+            IsRelationValid();
+            FindRelations();
         }
     }
 }
