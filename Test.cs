@@ -103,7 +103,7 @@
             setA.Union(setB);
 
             LogMessages[LogMessageType.Task] = "Return a new set that's the union of the two sets";
-            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)}, {string.Join(", ", arrayB)}";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3, 4, 5 }).ToString();
             LogMessages[LogMessageType.Ouput] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticUnionSet.ToString();
@@ -119,7 +119,7 @@
             setA.Intersection(setB);
 
             LogMessages[LogMessageType.Task] = "Return a new set that's the intersection of the two sets";
-            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)}, {string.Join(", ", arrayB)}";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 3 }).ToString();
             LogMessages[LogMessageType.Ouput] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticIntersectionSet.ToString();
@@ -135,7 +135,7 @@
             setA.Difference(setB);
 
             LogMessages[LogMessageType.Task] = "Return a set containing elements in setA but not in setB";
-            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)}, {string.Join(", ", arrayB)}";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2 }).ToString();
             LogMessages[LogMessageType.Ouput] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticDifferenceSet.ToString();
@@ -151,7 +151,7 @@
             set.Complement(universalSet);
 
             LogMessages[LogMessageType.Task] = "Return the complement of setA in relation to a universal set";
-            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)}, {string.Join(", ", arrayB)}";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 4, 5 }).ToString();
             LogMessages[LogMessageType.Ouput] = set.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticComplementSet.ToString();
