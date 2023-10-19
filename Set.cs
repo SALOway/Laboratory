@@ -289,6 +289,29 @@ namespace Laboratory
             }
             return true;
         }
+        /// <summary>
+        /// Finds relations within a set of elements by applying a relation function
+        /// </summary>
+        /// <typeparam name="T1">The expected element type of the first set</typeparam>
+        /// <typeparam name="T2">The expected element type of the second set</typeparam>
+        /// <param name="relationFunction">A function that defines the relation between elements</param>
+        /// <returns>A new set containing pairs of elements that satisfy the relation function</returns>
+        public Set FindRelations<T1, T2>(Func<T1, T2, bool> relationFunction)
+        {
+            var relation = new Set();
+            foreach (var firstElement in _elements)
+            {
+                if (firstElement is not T1) continue;
+                foreach (var secondElement in _elements)
+                {
+                    if (secondElement is not T2 || firstElement.Equals(secondElement)) continue;
+                    if (relationFunction((T1)firstElement, (T2)secondElement))
+                    {
+                        relation.AddElement((firstElement, secondElement));
+                    }
+                }
+            }
+            return relation;
         }
         /// <summary>
         /// Finds relations within a set of elements by applying a relation function
