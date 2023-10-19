@@ -7,7 +7,7 @@
             Task,
             Input,
             ExpectedOutput,
-            Ouput,
+            Output,
             OutputStatic
         }
 
@@ -16,7 +16,7 @@
             { LogMessageType.Task, string.Empty },
             { LogMessageType.Input, string.Empty },
             { LogMessageType.ExpectedOutput, string.Empty },
-            { LogMessageType.Ouput, string.Empty },
+            { LogMessageType.Output, string.Empty },
             { LogMessageType.OutputStatic, string.Empty },
         };
 
@@ -28,9 +28,10 @@
             Console.WriteLine("Input: " + LogMessages[LogMessageType.Input]);
             Console.WriteLine("Expected output: " + LogMessages[LogMessageType.ExpectedOutput]);
 
-            bool outputAreEqual = LogMessages[LogMessageType.Ouput] == LogMessages[LogMessageType.ExpectedOutput];
+            bool outputAreEqual = LogMessages[LogMessageType.Output] == LogMessages[LogMessageType.ExpectedOutput];
             if (outputAreEqual) Console.ForegroundColor = ConsoleColor.Green;
             else Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"Output: {LogMessages[LogMessageType.Output]}");
 
             Console.WriteLine($"Output: {LogMessages[LogMessageType.Ouput]}");
             if (!string.IsNullOrEmpty(LogMessages[LogMessageType.OutputStatic]))
@@ -51,7 +52,7 @@
             LogMessages[LogMessageType.Task] = "Create a set from a list of elements, removing any duplicates";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = "{ 1, 2, 3 }";
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void AddElement()
@@ -64,7 +65,7 @@
             LogMessages[LogMessageType.Task] = "Add an element to the set if it's not already present";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ], {element}";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3, 4 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void RemoveElement()
@@ -77,7 +78,7 @@
             LogMessages[LogMessageType.Task] = "Remove an element if it exists in the set";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ], {element}";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void ContainsElement()
@@ -90,7 +91,7 @@
             LogMessages[LogMessageType.Task] = "Return a boolean indicating if an element is present in the set";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ], {element}";
             LogMessages[LogMessageType.ExpectedOutput] = false.ToString();
-            LogMessages[LogMessageType.Ouput] = isSetContainsElement.ToString();
+            LogMessages[LogMessageType.Output] = isSetContainsElement.ToString();
             Log();
         }
         static public void Union()
@@ -105,7 +106,7 @@
             LogMessages[LogMessageType.Task] = "Return a new set that's the union of the two sets";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3, 4, 5 }).ToString();
-            LogMessages[LogMessageType.Ouput] = setA.ToString();
+            LogMessages[LogMessageType.Output] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticUnionSet.ToString();
             Log();
         }
@@ -121,7 +122,7 @@
             LogMessages[LogMessageType.Task] = "Return a new set that's the intersection of the two sets";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 3 }).ToString();
-            LogMessages[LogMessageType.Ouput] = setA.ToString();
+            LogMessages[LogMessageType.Output] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticIntersectionSet.ToString();
             Log();
         }
@@ -137,7 +138,7 @@
             LogMessages[LogMessageType.Task] = "Return a set containing elements in setA but not in setB";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2 }).ToString();
-            LogMessages[LogMessageType.Ouput] = setA.ToString();
+            LogMessages[LogMessageType.Output] = setA.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticDifferenceSet.ToString();
             Log();
         }
@@ -153,7 +154,7 @@
             LogMessages[LogMessageType.Task] = "Return the complement of setA in relation to a universal set";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 4, 5 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             LogMessages[LogMessageType.OutputStatic] = staticComplementSet.ToString();
             Log();
         }
@@ -173,7 +174,7 @@
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 3, 5, 6, 7 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void EvaluateEasy_2()
@@ -194,7 +195,7 @@
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 4, 5, 6, 8, 9, 10 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void EvaluateMedium_1()
@@ -216,7 +217,7 @@
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression (medium dificulty)";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
         static public void EvaluateMedium_2()
@@ -238,14 +239,9 @@
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression (medium dificulty)";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new int[] { 1, 2, 3, 7, 8, 9, 11, 13, 14, 15, 16, 17, 18 }).ToString();
-            LogMessages[LogMessageType.Ouput] = set.ToString();
+            LogMessages[LogMessageType.Output] = set.ToString();
             Log();
         }
-        /*
-                 •	cartesianProduct(setA, setB): Generates the Cartesian product of two sets.
-            •	Input: ([1,2], ['a','b'])
-            •	Output: [(1,'a'), (1,'b'), (2,'a'), (2,'b')]
-         */
         static public void CartesianProduct()
         {
             var arrayA = new int[] { 1, 2 };
@@ -259,7 +255,7 @@
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, char)[] { (1, 'a'), (1, 'b'), (2, 'a'), (2, 'b') }).ToString();
             LogMessages[LogMessageType.OutputStatic] = cartesianSet.ToString();
-            LogMessages[LogMessageType.Ouput] = setA.ToString();
+            LogMessages[LogMessageType.Output] = setA.ToString();
             Log();
         }
 
