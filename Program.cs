@@ -64,6 +64,27 @@ Objective: Understand and implement the Cartesian product of sets and related op
             •	Example function: "Only pairs where a number from setA is less than a number from setB".
             •	Input: ([1,2,3], [3,4,5], filterFunction)
             •	Output: [(1,3), (1,4), (1,5), (2,3), (2,4), (2,5), (3,4), (3,5)]
+Lab #3: "Advanced Propositional Logic and Computational Logic"
+    1.  Complex Logical Expressions Evaluation
+        •	Input:
+            •	Expression: "(A AND B) OR (NOT C)"
+            •	Values: {"A": true, "B": false, "C": true}
+        •	Output: false
+    Task 2: Automated Truth Table Generation
+        •	Input:
+                •	Expression: "(A AND B) OR C"
+        •	Output:
+        •	Truth Table:
+                         A     | B     | C     | (A AND B) OR C
+                         --------------------------------------
+                         true  | true  | true  | true
+                         true  | true  | false | true
+                         true  | false | true  | true
+                         true  | false | false | false
+                         false | true  | true  | true
+                         false | true  | false | false
+                         false | false | true  | true
+                         false | false | false | false
  */
 
 namespace Laboratory
