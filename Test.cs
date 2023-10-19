@@ -274,7 +274,7 @@
             var isRelationValidStatic = Set.IsRelationValid(relationSet, setA, setB);
             var isRelationValid = setA.IsRelationValid(relationSet, setB);
 
-            LogMessages[LogMessageType.Task] = "Given two sets, compute the cartesian product";
+            LogMessages[LogMessageType.Task] = "Validate if a given relation is valid for the Cartesian product of two sets";
             LogMessages[LogMessageType.Input] = $"{relationSet} , [ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
             LogMessages[LogMessageType.ExpectedOutput] = true.ToString();
             LogMessages[LogMessageType.OutputStatic] = isRelationValidStatic.ToString();
@@ -289,7 +289,7 @@
             var relationsSetStatic = Set.FindRelations(set, relationFunction);
             var relationsSet = set.FindRelations(relationFunction);
 
-            LogMessages[LogMessageType.Task] = "Given two sets, compute the cartesian product";
+            LogMessages[LogMessageType.Task] = "Find all the relations for a given set based on a relation function";
             LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ], {nameof(relationFunction)}";
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, int)[] { (2, 1), (3, 1), (4, 1), (4, 2), (6, 1), (6, 2), (6, 3) }).ToString();
             LogMessages[LogMessageType.OutputStatic] = relationsSetStatic.ToString();
