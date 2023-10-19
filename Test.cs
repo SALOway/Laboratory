@@ -29,13 +29,14 @@
             Console.WriteLine("Expected output: " + LogMessages[LogMessageType.ExpectedOutput]);
 
             bool outputAreEqual = LogMessages[LogMessageType.Output] == LogMessages[LogMessageType.ExpectedOutput];
-            if (outputAreEqual) Console.ForegroundColor = ConsoleColor.Green;
-            else Console.ForegroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = outputAreEqual ? ConsoleColor.Green : ConsoleColor.Red;
             Console.WriteLine($"Output: {LogMessages[LogMessageType.Output]}");
+            LogMessages[LogMessageType.Output] = string.Empty;
 
-            Console.WriteLine($"Output: {LogMessages[LogMessageType.Ouput]}");
             if (!string.IsNullOrEmpty(LogMessages[LogMessageType.OutputStatic]))
             {
+                bool staticOutputAreEqual = LogMessages[LogMessageType.OutputStatic] == LogMessages[LogMessageType.ExpectedOutput];
+                Console.ForegroundColor = staticOutputAreEqual ? ConsoleColor.Green : ConsoleColor.Red;
                 Console.WriteLine($"Output (static): " + LogMessages[LogMessageType.OutputStatic]);
                 LogMessages[LogMessageType.OutputStatic] = string.Empty;
             }
