@@ -91,14 +91,6 @@ namespace Laboratory
 {
     class Program
     {
-        public static bool IsDivisible(int a, int b)
-        {
-            return a % b == 0;
-        }
-        public static bool IsLess(decimal a, decimal b) 
-        {
-            return a < b;
-        }
         static void Main(string[] args)
         {
             Test.RunAll();

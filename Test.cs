@@ -1,6 +1,6 @@
 ﻿namespace Laboratory
 {
-    class Test
+    static class Test
     {
         private enum LogMessageType
         {
