@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Reflection;
 
 namespace Laboratory
 {
@@ -59,7 +61,40 @@ namespace Laboratory
         /// </summary>
         /// <param name="element">The element to check for</param>
         /// <returns>True if the element is found in the set; otherwise, false</returns>
-        public bool Contains(object element) => _elements.Contains(element);
+        public bool Contains(object element)
+        {
+            if (element is not null && element.GetType().FullName?.StartsWith("System.ValueTuple") == true)
+            {
+                foreach (var setElement in _elements)
+                {
+                    if (element.GetType().FullName?[.."System.ValueTuple`N".Length] != setElement.GetType().FullName?[.."System.ValueTuple`N".Length]) continue;
+
+                    var tupleFields = element.GetType().GetFields();
+                    var setTupleFields = setElement.GetType().GetFields();
+
+                    if (tupleFields.Length != setTupleFields.Length) return false;
+
+                    for (int i = 0; i < tupleFields.Length; i++)
+                    {
+                        var tupleFieldValue = tupleFields[i].GetValue(element);
+                        var setTupleFieldValue = setTupleFields[i].GetValue(setElement);
+
+                        if (Equals(tupleFieldValue, setTupleFieldValue))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var setElement in _elements)
+                {
+                    if (setElement.Equals(element)) return true;
+                }
+            }
+            return false; 
+        }
         /// <summary>
         /// Compares two sets for equality by checking if they have the same number of elements and all of their elements are the same
         /// </summary>
