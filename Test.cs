@@ -281,7 +281,21 @@
             LogMessages[LogMessageType.Output] = isRelationValid.ToString();
             Log();
         }
+        static public void FindRelations()
+        {
+            var relationFunction = (int a, int b) => a % b == 0;
+            var array = new int[] { 1, 2, 3, 4, 6 };
+            var set = new Set(array);
+            var relationsSetStatic = Set.FindRelations(set, relationFunction);
+            var relationsSet = set.FindRelations(relationFunction);
 
+            LogMessages[LogMessageType.Task] = "Given two sets, compute the cartesian product";
+            LogMessages[LogMessageType.Input] = $"[ {string.Join(", ", array)} ], {nameof(relationFunction)}";
+            LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, int)[] { (2, 1), (3, 1), (4, 1), (4, 2), (6, 1), (6, 2), (6, 3) }).ToString();
+            LogMessages[LogMessageType.OutputStatic] = relationsSetStatic.ToString();
+            LogMessages[LogMessageType.Output] = relationsSet.ToString();
+            Log();
+        }
 
         public static void RunAll()
         {
