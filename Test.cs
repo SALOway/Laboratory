@@ -296,6 +296,23 @@
             LogMessages[LogMessageType.Output] = relationsSet.ToString();
             Log();
         }
+        static public void FilteredCartesianProduct()
+        {
+            var filterFunction = (int a, int b) => a < b;
+            var arrayA = new int[] { 1, 2, 3 };
+            var arrayB = new int[] { 3, 4, 5 };
+            var setA = new Set(arrayA);
+            var setB = new Set(arrayB);
+            var cartesianSet = Set.CartesianProduct(setA, setB, filterFunction);
+            setA.CartesianProduct(setB, filterFunction);
+
+            LogMessages[LogMessageType.Task] = "Given two sets and filter function, compute the cartesian product which only includes pairs that satisfy the filter function";
+            LogMessages[LogMessageType.Input] = $"filter => {{ a < b }}, [ {string.Join(", ", arrayA)} ], [ {string.Join(", ", arrayB)} ]";
+            LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, int)[] { (1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 4), (3, 5) }).ToString();
+            LogMessages[LogMessageType.OutputStatic] = cartesianSet.ToString();
+            LogMessages[LogMessageType.Output] = setA.ToString();
+            Log();
+        }
 
         public static void RunAll()
         {
@@ -314,6 +331,7 @@
             CartesianProduct();
             IsRelationValid();
             FindRelations();
+            FilteredCartesianProduct();
         }
     }
 }
