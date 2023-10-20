@@ -172,9 +172,7 @@
                 { "B", new Set(new [] { 3, 4, 5 }) },
                 { "C", new Set(new [] { 5, 6, 7 }) }
             };
-
-            var evaluator = new SetEvaluator<int>(setsDict);
-            var set = evaluator.Evaluate(expression);
+            var set = SetEvaluator.Evaluate(expression, setsDict);
 
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
@@ -193,9 +191,7 @@
                 { "D", new Set(new [] { 10, 4, 12, 5, 6 }) },
                 { "E", new Set(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) },
             };
-
-            var evaluator = new SetEvaluator<int>(setsDict);
-            var set = evaluator.Evaluate(expression);
+            var set = SetEvaluator.Evaluate(expression, setsDict);
 
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
@@ -215,9 +211,7 @@
                 { "E", new Set(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) },
                 { "F", new Set(new [] { 11, 12, 13, 14, 15, 16, 17, 18 }) },
             };
-
-            var evaluator = new SetEvaluator<int>(setsDict);
-            var set = evaluator.Evaluate(expression);
+            var set = SetEvaluator.Evaluate(expression, setsDict);
 
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression (medium dificulty)";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);
@@ -237,9 +231,7 @@
                 { "E", new Set(new [] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }) },
                 { "F", new Set(new [] { 11, 12, 13, 14, 15, 16, 17, 18 }) },
             };
-
-            var evaluator = new SetEvaluator<int>(setsDict);
-            var set = evaluator.Evaluate(expression);
+            var set = SetEvaluator.Evaluate(expression, setsDict);
 
             LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression (medium dificulty)";
             LogMessages[LogMessageType.Input] = $"{expression},\nsetsDict = " + DictionaryToListOfSets(setsDict);

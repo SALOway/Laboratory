@@ -9,6 +9,7 @@ namespace Laboratory
     /// </summary>
     class Set
     {
+        public static Set Empty => new Set();
         private List<object> _elements = new List<object>() { };
         public int Count => _elements.Count;
         public Set() { }

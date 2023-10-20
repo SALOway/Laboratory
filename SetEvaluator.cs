@@ -1,12 +1,7 @@
 ﻿namespace Laboratory
 {
-    class SetEvaluator<T>
+    class SetEvaluator
     {
-        bool _debug = false;
-        private List<string> _tokens = new List<string>();
-        private Stack<string> _operations = new Stack<string>();
-        private Stack<Set> _values = new Stack<Set>();
-        private readonly Dictionary<string, Set> _sets;
         private static readonly Dictionary<string, int> setOperators = new Dictionary<string, int>
         {
             { "(", 1},
@@ -16,11 +11,6 @@
             { "difference", 0},
             { "intersection", 0},
         };
-        public SetEvaluator(Dictionary<string, Set> sets, bool debug = false)
-        {
-            _sets = sets;
-            _debug = debug;
-        }
         /// <summary>
         /// Convert string expression to list of tokens
         /// </summary>
@@ -28,7 +18,7 @@
         /// <returns>
         /// List of tokens from expression
         /// </returns>
-        List<string> ConvertToTokens(string expression)
+        private static List<string> ConvertToTokens(string expression)
         {
             var tokens = new List<string>();
             string temp = "";
@@ -39,17 +29,17 @@
                     // extract '(' and ')' symbols  and push temp if it is not empty
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        _tokens.Add(temp);
+                        tokens.Add(temp);
                         temp = "";
                     }
-                    _tokens.Add(symbol.ToString());
+                    tokens.Add(symbol.ToString());
                 }
                 else if (symbol == ' ')
                 {
                     // push temp
                     if (!string.IsNullOrEmpty(temp))
                     {
-                        _tokens.Add(temp);
+                        tokens.Add(temp);
                         temp = "";
                     }
                 }
@@ -58,10 +48,10 @@
                     temp += symbol;
                 }
             }
-            if (!string.IsNullOrEmpty(temp)) _tokens.Add(temp);
-            return _tokens;
+            if (!string.IsNullOrEmpty(temp)) tokens.Add(temp);
+            return tokens;
         }
-        private Set Execute(string operation, Set leftOperand, Set rightOperand)
+        private static Set Execute(string operation, Set leftOperand, Set rightOperand)
         {
             var set = new Set();
             switch (operation)
@@ -81,61 +71,60 @@
             }
             return set;
         }
-        public Set Evaluate(string input)
+        public static Set Evaluate(string input, Dictionary<string, Set> variables)
         {
-            if (_sets.Count < 2) return new Set();
-            _tokens = ConvertToTokens(input);
-            _operations.Clear();
-            _values.Clear();
-            foreach (string token in _tokens)
+            if (variables.Count < 2) return Set.Empty;
+            var tokens = ConvertToTokens(input);
+            var operations = new Stack<string>();
+            var values = new Stack<Set>();
+            foreach (string token in tokens)
             {
-                if (_debug) Log(token);
                 if (setOperators.ContainsKey(token))
                 {
                     if (token == ")")
                     {
-                        var operation = _operations.Pop();
-                        while (operation != "(" && _operations.Count > 0 && _values.Count > 1)
+                        var operation = operations.Pop();
+                        while (operation != "(" && operations.Count > 0 && values.Count > 1)
                         {
-                            var b = _values.Pop();
-                            var a = _values.Pop();
-                            _values.Push(Execute(operation, a, b));
-                            operation = _operations.Pop();
+                            var b = values.Pop();
+                            var a = values.Pop();
+                            values.Push(Execute(operation, a, b));
+                            operation = operations.Pop();
                         }
                         continue;
                     }
 
                     bool procedenceIsLowerOrEqual = false;
                     string lastOperator;
-                    if (_operations.TryPeek(out lastOperator))
+                    if (operations.TryPeek(out lastOperator))
                     {
                         procedenceIsLowerOrEqual = setOperators[token] <= setOperators[lastOperator];
                     }
 
                     if (procedenceIsLowerOrEqual)
                     {
-                        if (_operations.Count > 0)
+                        if (operations.Count > 0)
                         {
-                            var operation = _operations.Pop();
-                            while (operation != "(" && _values.Count > 1)
+                            var operation = operations.Pop();
+                            while (operation != "(" && values.Count > 1)
                             {
-                                var b = _values.Pop();
-                                var a = _values.Pop();
-                                _values.Push(Execute(operation, a, b));
+                                var b = values.Pop();
+                                var a = values.Pop();
+                                values.Push(Execute(operation, a, b));
                             }
                             if (operation == "(")
                             {
-                                _operations.Push(operation);
+                                operations.Push(operation);
                             }
                         }
                     }
-                    _operations.Push(token);
+                    operations.Push(token);
                 }
                 else
                 {
-                    if (_sets.TryGetValue(token, out Set set))
+                    if (variables.TryGetValue(token, out Set set))
                     {
-                        _values.Push(set);
+                        values.Push(set);
                     }
                     else
                     {
@@ -144,22 +133,15 @@
                 }
             }
 
-            while (_operations.Count > 0)
+            while (operations.Count > 0)
             {
-                var operation = _operations.Pop();
-                var b = _values.Pop();
-                var a = _values.Pop();
-                _values.Push(Execute(operation, a, b));
+                var operation = operations.Pop();
+                var b = values.Pop();
+                var a = values.Pop();
+                values.Push(Execute(operation, a, b));
             }
 
-            return _values.Pop();
-        }
-        private void Log(string token)
-        {
-            Console.WriteLine("Current token: " + token);
-            Console.WriteLine("Current operations: " + "{" + string.Join(", ", _operations) + "}");
-            Console.WriteLine("Current values: " + "{" + string.Join(", ", _values) + "}");
-            Console.WriteLine();
+            return values.Pop();
         }
     }
 }
