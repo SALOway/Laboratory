@@ -2,17 +2,17 @@
 {
     class SetEvaluator
     {
-        private static readonly Dictionary<string, int> setOperators = new Dictionary<string, int>
+        private static readonly Dictionary<string, int> predefinedSetOperators = new Dictionary<string, int>
         {
-            { "(", 1},
-            { ")", 1},
-            { "union", 0},
-            { "complement", 0},
-            { "difference", 0},
-            { "intersection", 0},
+            { "(", 0 },
+            { ")", -1 },
+            { "union", 1 },
+            { "intersection", 1 },
+            { "complement", 1},
+            { "difference", 1},
         };
         /// <summary>
-        /// Convert string expression to list of tokens
+        /// Convert string expression to list of tokens based on spaces and predefined operators
         /// </summary>
         /// <param name="expression"></param>
         /// <returns>
@@ -21,36 +21,44 @@
         private static List<string> ConvertToTokens(string expression)
         {
             var tokens = new List<string>();
-            string temp = "";
-            foreach (var symbol in expression)
+            var temp = "";
+            for (int i = 0; i < expression.Length; i++)
             {
-                if (symbol == '(' || symbol == ')')
+                var symbol = expression[i];
+                if (symbol == ' ')
                 {
-                    // extract '(' and ')' symbols  and push temp if it is not empty
                     if (!string.IsNullOrEmpty(temp))
                     {
                         tokens.Add(temp);
                         temp = "";
                     }
-                    tokens.Add(symbol.ToString());
+                    continue;
                 }
-                else if (symbol == ' ')
+                temp += symbol;
+
+                // try find operator
+                foreach (var op in predefinedSetOperators.Keys)
                 {
-                    // push temp
-                    if (!string.IsNullOrEmpty(temp))
+                    bool outOfRange = (i + op.Length) > expression.Length;
+                    if (outOfRange) continue;
+
+                    var potentialOperator = expression.Substring(i, op.Length).ToLower();
+                    var isActuallyOperator = potentialOperator.Equals(op);
+                    if (isActuallyOperator)
                     {
-                        tokens.Add(temp);
+                        var variable = temp[..^1];
+                        if (!string.IsNullOrEmpty(variable)) tokens.Add(variable);
+                        tokens.Add(potentialOperator);
                         temp = "";
+                        i += op.Length - 1;
+                        break;
                     }
-                }
-                else
-                {
-                    temp += symbol;
                 }
             }
             if (!string.IsNullOrEmpty(temp)) tokens.Add(temp);
             return tokens;
         }
+
         private static Set Execute(string operation, Set leftOperand, Set rightOperand)
         {
             var set = new Set();
@@ -75,67 +83,55 @@
         {
             if (variables.Count < 2) return Set.Empty;
             var tokens = ConvertToTokens(input);
-            var operations = new Stack<string>();
+            var operators = new Stack<string>();
             var values = new Stack<Set>();
             foreach (string token in tokens)
             {
-                if (setOperators.ContainsKey(token))
+                if (predefinedSetOperators.ContainsKey(token))
                 {
-                    if (token == ")")
+                    if (token == "(")
                     {
-                        var operation = operations.Pop();
-                        while (operation != "(" && operations.Count > 0 && values.Count > 1)
-                        {
-                            var b = values.Pop();
-                            var a = values.Pop();
-                            values.Push(Execute(operation, a, b));
-                            operation = operations.Pop();
-                        }
+                        operators.Push(token);
                         continue;
                     }
-
-                    bool procedenceIsLowerOrEqual = false;
-                    string lastOperator;
-                    if (operations.TryPeek(out lastOperator))
+                    if (operators.Count > 0)
                     {
-                        procedenceIsLowerOrEqual = setOperators[token] <= setOperators[lastOperator];
-                    }
-
-                    if (procedenceIsLowerOrEqual)
-                    {
-                        if (operations.Count > 0)
+                        bool lastOperatorPrecedenceIsLower = predefinedSetOperators[operators.Peek()] < predefinedSetOperators[token];
+                        if (!lastOperatorPrecedenceIsLower && values.Count > 1)
                         {
-                            var operation = operations.Pop();
-                            while (operation != "(" && values.Count > 1)
+                            var operation = operators.Pop();
+                            while (operation != "(" && values.Count > 1) // remove [operators.Count > 0]???
                             {
                                 var b = values.Pop();
                                 var a = values.Pop();
                                 values.Push(Execute(operation, a, b));
+                                if (operators.Count == 0) break;
+                                operation = operators.Pop();
                             }
-                            if (operation == "(")
+                            if (operation == "(" && token == ")")
                             {
-                                operations.Push(operation);
+                                continue;
                             }
                         }
                     }
-                    operations.Push(token);
+                    operators.Push(token);
                 }
                 else
                 {
-                    if (variables.TryGetValue(token, out Set set))
+                    try
                     {
-                        values.Push(set);
+                        values.Push(variables[token]);
                     }
-                    else
+                    catch (Exception)
                     {
-                        return new Set();
+                        throw new Exception($"Token [{token}] is not exist in given dictonary: [{string.Join(", ", variables.Keys)}]");
                     }
                 }
             }
 
-            while (operations.Count > 0)
+            while (operators.Count > 0)
             {
-                var operation = operations.Pop();
+                var operation = operators.Pop();
                 var b = values.Pop();
                 var a = values.Pop();
                 values.Push(Execute(operation, a, b));
