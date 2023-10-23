@@ -48,6 +48,7 @@
             Console.WriteLine();
         }
         private static string DictionaryToListOfSets(Dictionary<string, Set> sets) => "{\n" + string.Join("\n", sets.Select(kv => $"    {kv.Key}: {string.Join(", ", kv.Value)}")) + "\n}";
+        private static string DictionaryToListOfBooleans(Dictionary<string, bool> sets) => "{\n" + string.Join("\n", sets.Select(KeyValue => $"    {KeyValue.Key}: {KeyValue.Value}")) + "\n}";
 
         static public void CreateSet()
         {
@@ -303,6 +304,23 @@
             LogMessages[LogMessageType.ExpectedOutput] = new Set(new (int, int)[] { (1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5), (3, 4), (3, 5) }).ToString();
             LogMessages[LogMessageType.OutputStatic] = cartesianSet.ToString();
             LogMessages[LogMessageType.Output] = setA.ToString();
+            Log();
+        }
+        static public void LogicalEvaluate()
+        {
+            var expression = "(A AND B) OR (NOT C)";
+            var variables = new Dictionary<string, bool>()
+            {
+                { "A", true },
+                { "B", false },
+                { "C", true }
+            };
+            var result = LogicalEvaluator.Evaluate(expression, variables);
+
+            LogMessages[LogMessageType.Task] = "Given a string expression and a dictionary of sets, compute the result of the expression";
+            LogMessages[LogMessageType.Input] = $"{expression},\nValues = " + DictionaryToListOfBooleans(variables);
+            LogMessages[LogMessageType.ExpectedOutput] = false.ToString();
+            LogMessages[LogMessageType.Output] = result.ToString();
             Log();
         }
 
