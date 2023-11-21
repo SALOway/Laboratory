@@ -58,7 +58,6 @@
             if (!string.IsNullOrEmpty(temp)) tokens.Add(temp);
             return tokens;
         }
-
         private static Set Execute(string operation, Set leftOperand, Set rightOperand)
         {
             var set = new Set();
@@ -198,7 +197,6 @@
             if (!string.IsNullOrEmpty(temp)) tokens.Add(temp);
             return tokens;
         }
-
         private static bool Execute(string operation, bool leftOperand, bool rightOperand = false)
         {
             switch (operation)

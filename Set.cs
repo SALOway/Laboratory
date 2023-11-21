@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using System.Security.Cryptography;
 
 namespace Laboratory
 {
@@ -64,6 +65,7 @@ namespace Laboratory
         /// <returns>True if the element is found in the set; otherwise, false</returns>
         public bool Contains(object element)
         {
+            if (_elements.Count < 1) return false;
             if (element is not null && element.GetType().FullName?.StartsWith("System.ValueTuple") == true)
             {
                 foreach (var setElement in _elements)
@@ -75,16 +77,18 @@ namespace Laboratory
 
                     if (tupleFields.Length != setTupleFields.Length) return false;
 
+                    bool tuplesEquals = true;
                     for (int i = 0; i < tupleFields.Length; i++)
                     {
                         var tupleFieldValue = tupleFields[i].GetValue(element);
                         var setTupleFieldValue = setTupleFields[i].GetValue(setElement);
 
-                        if (Equals(tupleFieldValue, setTupleFieldValue))
+                        if (!Equals(tupleFieldValue, setTupleFieldValue))
                         {
-                            return true;
+                            tuplesEquals = false;
                         }
                     }
+                    if (tuplesEquals) return true;
                 }
             }
             else
@@ -339,6 +343,173 @@ namespace Laboratory
             }
             return relation;
         }
+
+        /// <summary>
+        /// Checks if the set consists only of System.ValueTuple`2 types
+        /// </summary>
+        /// <returns>True if the set consists only of System.ValueTuple`2 types; otherwise, false</returns>
+        private bool IsSetOfOrderedPairs()
+        {
+            foreach (var element in _elements)
+            {
+                if (element.GetType().FullName?[.."System.ValueTuple`N".Length] != "System.ValueTuple`2")
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public Set GetDomain()
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                var domain = Empty;
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    domain.AddElement(pairFields[0].GetValue(pair));
+                }
+                return domain;
+            }
+            else
+            { 
+                return Empty; 
+            }
+        }
+        public Set GetRange()
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                var range = Empty;
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    range.AddElement(pairFields[1].GetValue(pair));
+                }
+                return range;
+            }
+            else
+            {
+                return Empty;
+            }
+        }
+
+        public string CheckParity()
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                bool isEven = true;
+                bool isOdd = true;
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    var x = (int?)pairFields[0].GetValue(pair);
+                    var y = (int?)pairFields[1].GetValue(pair);
+
+                    if (x == null || y == null)
+                    {
+                        return "Set doesn't represent a numerical function";
+                    }
+
+                    var correspondingPairExists = Contains((-x, y));
+                    if (!correspondingPairExists)
+                    {
+                        Console.WriteLine($"Doesn't contain ({-x}, {y}) to be Even");
+                        isEven = false;
+                    }
+
+                    var correspondingNegatedPairExists = Contains((-x, -y));
+                    if (!correspondingNegatedPairExists)
+                    {
+                        Console.WriteLine($"Doesn't contain ({-x}, {-y}) to be Odd");
+                        isOdd = false;
+                    }
+                }
+                if (isEven)
+                {
+                    return "Even";
+                }
+                else if (isOdd)
+                {
+                    return "Odd";
+                }
+                else
+                {
+                    return "Neither";
+                }
+            }
+            else
+            {
+                return "Set doesn't represent a function";
+            }
+        }
+
+        public bool IsInjective() // should return true for domain and range like D: {1, 2, 3} and R: {1, 2, 3, 4, 5}
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                var map = new Dictionary<object, object>();
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    var x = pairFields[0].GetValue(pair);
+                    var y = pairFields[1].GetValue(pair);
+
+                    if (map.ContainsKey(x))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (map.Values.Contains(y))
+                        {
+                            return false;
+                        }
+                        map.Add(x, y);
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsSurjective()
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                var map = new Dictionary<object, object>();
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    var x = pairFields[0].GetValue(pair);
+                    var y = pairFields[1].GetValue(pair);
+
+                    if (map.ContainsKey(x))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (map.Values.Contains(y))
+                        {
+                            return false;
+                        }
+                        map.Add(x, y);
+                    }
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
         public override string ToString() => "{ " + string.Join(", ", _elements) + " }";
     }
 }
