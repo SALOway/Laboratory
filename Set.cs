@@ -435,7 +435,7 @@ namespace Laboratory
                 }
                 else
                 {
-                    return "Neither";
+                    return "Neither even, nor odd";
                 }
             }
             else

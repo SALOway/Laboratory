@@ -230,7 +230,6 @@
                     xIntercepts.AddElement(xIntercept);
                 }
 
-                Console.WriteLine();
                 if ((i + 1) >= xValues.Count)
                 {
                     continue;
