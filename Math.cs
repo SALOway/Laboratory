@@ -13,6 +13,34 @@
         static public float Abs(float x) => x > 0 ? x : -x;
         static public int Abs(int x) => x > 0 ? x : -x;
 
+        static public double Min(params double[] numbers)
+        {
+            if (numbers.Length == 0) return double.NaN;
+            var min = numbers[0];
+            foreach (var number in numbers)
+            {
+                if (number < min)
+                {
+                    min = number;
+                }
+            }
+            return min;
+        }
+
+        static public double Max(params double[] numbers)
+        {
+            if (numbers.Length == 0) return double.NaN;
+            var max = numbers[0];
+            foreach (var number in numbers)
+            {
+                if (number > max)
+                {
+                    max = number;
+                }
+            }
+            return max;
+        }
+
         static public bool IsEven(double x) => x % 2 == 0;
         static public bool IsEven(float x) => x % 2 == 0;
         static public bool IsEven(int x) => x % 2 == 0;
@@ -146,6 +174,20 @@
             };
         }
 
+        static public double FindYIntercept(double x1, double y1, double x2, double y2)
+        {
+            double slope = (y2 - y1) / (x2 - x1);
+            double yIntercept = y1 - slope * x1;
+            return yIntercept;
+        }
+
+        static public double FindXIntercept(double x1, double y1, double x2, double y2)
+        {
+            double slope = (y2 - y1) / (x2 - x1);
+            double xIntercept = x1 - y1 / slope;
+            return xIntercept;
+        }
+
         static public GraphInformation GraphInformationExtractor(IEnumerable<ValueTuple<double, double>> points)
         {
             if (points.Count() < 1)
@@ -166,39 +208,42 @@
             var xIntercepts = Set.Empty;
             var yIntercepts = Set.Empty;
             var grapfInfo = new GraphInformation(xIntercepts, yIntercepts);
-            double previousY = yValues[0];
-            if (xValues[0] == 0)
-            {
-                yIntercepts.AddElement(yValues[0]);
-            }
-            if (yValues[0] == 0)
-            {
-                xIntercepts.AddElement(xValues[0]);
-            }
 
             for (var i = 1; i < xValues.Count; i++)
             {
-                if (xValues[i] == 0)
+                var currentX = xValues[i];
+                var currentY = yValues[i];
+                var previousX = xValues[i - 1];
+                var previousY = yValues[i - 1];
+
+                var doInterceptY = Max(currentX, previousX) >= 0 && Min(currentX, previousX) <= 0;
+                if (doInterceptY)
                 {
-                    yIntercepts.AddElement(yValues[i]);
-                }
-                if (yValues[i] == 0)
-                {
-                    xIntercepts.AddElement(xValues[i]);
+                    var yIntercept = FindYIntercept(previousX, previousY, currentX, currentY);
+                    yIntercepts.AddElement(yIntercept);
                 }
 
+                bool doInterceptX = Max(currentY, previousY) >= 0 && Min(currentY, previousY) <= 0;
+                if (doInterceptX)
+                {
+                    var xIntercept = FindXIntercept(previousX, previousY, currentX, currentY);
+                    xIntercepts.AddElement(xIntercept);
+                }
+
+                Console.WriteLine();
                 if ((i + 1) >= xValues.Count)
                 {
                     continue;
                 }
 
-                if (yValues[i] > previousY && yValues[i] > yValues[i + 1])
+                var nextY = yValues[i + 1];
+                if (currentY > previousY && currentY > nextY)
                 {
-                    grapfInfo.UpdateMaxima(yValues[i]);
+                    grapfInfo.UpdateMaxima(currentY);
                 }
-                if (yValues[i] < previousY && yValues[i] < yValues[i + 1])
+                else if (currentY < previousY && currentY < nextY)
                 {
-                    grapfInfo.UpdateMinima(yValues[i]);
+                    grapfInfo.UpdateMinima(currentY);
                 }
             }
             return grapfInfo;
@@ -245,13 +290,13 @@
             if (YIntercepts != null)
                 str += "Y-Intercepts: " + YIntercepts.ToString();
             if (Maxima == null)
-                str += '\n' + "Maxima: " + "None";
+                str += '\n' + "Maxima y-value: " + "None";
             else
-                str += '\n' + "Maxima: " + Maxima.ToString();
+                str += '\n' + "Maxima y-value: " + Maxima.ToString();
             if (Minima == null)
-                str += '\n' + "Minima: " + "None";
+                str += '\n' + "Minima y-value: " + "None";
             else
-                str += '\n' + "Minima: " + Minima.ToString();
+                str += '\n' + "Minima y-value: " + Minima.ToString();
             return str;
         }
     }
