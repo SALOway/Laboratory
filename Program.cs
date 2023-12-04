@@ -166,7 +166,7 @@ Lab #4: "???"
     Instructions: The program should evaluate the function, consider its domain and range, and provide an explanation of the evaluation process and results.
  */
 /*
-Lab #5: "???"
+Lab #5: "Functions"
     Easy Tasks (60-74 points)
         Task 1: Function Evaluator
         Objective: Write a program to evaluate a simple linear function f(x) = mx + b.
@@ -236,59 +236,47 @@ Lab #5: "???"
                 •	Minima: None
         Instructions: Implement a function that analyzes a list of points to determine the graph's intercepts, maxima, and minima. Discuss the method for finding these features in a discrete set of points.
  */
+/*
+Lab #6: "Relations"
+Easy Tasks (60-74 points)
+    Task 1: Reflexivity Checker Objective: Write a program that checks if a relation is reflexive on a set.
+        •	Input:
+            •	Set: {1, 2, 3}
+            •	Relation: {(1, 1), (2, 2), (3, 3)}
+        •	Output:
+            •	Is Reflexive: True
+    Task 2: Symmetry Identifier Objective: Implement a program that identifies if a relation on a set is symmetric.
+        •	Input:
+            •	Relation: {(1, 2), (2, 1), (3, 3)}
+        •	Output:
+            •	Is Symmetric: True
+    Task 3: Transitivity Verifier Objective: Create a program to verify the transitivity of a relation on a set.
+        •	Input:
+            •	Relation: {(1, 2), (2, 3), (1, 3)}
+        •	Output:
+            •	Is Transitive: True
+Medium Tasks (75-89 points)
+    Task 4: Equivalence Relation Checker Objective: Create a program that checks if a relation on a set is an equivalence relation (reflexive, symmetric, and transitive).
+        •	Input:
+            •	Set: {1, 2, 3}
+            •	Relation: {(1, 1), (2, 2), (3, 3), (1, 2), (2, 1), (2, 3), (3, 2)}
+        •	Output:
+            •	Is Equivalence Relation: False
+Hard Tasks (90-100 points)
+    Task 5: Inverse Relation Generator Objective: Implement a program that generates the inverse of a given relation.
+        •	Input:
+            •	Relation: {(1, 2), (3, 4), (5, 6)}
+        •	Output:
+            •	Inverse Relation: {(2, 1), (4, 3), (6, 5)}
 
+ */
 
-using System.ComponentModel.DataAnnotations;
-
-namespace Laboratory
+class Program
 {
-    class Program
+    static void Main()
     {
-        static void Main(string[] args)
-        {
-            // task 1
-            var x = 4;
-            var b = 3; 
-            var m = 2;
-            Console.WriteLine($"For f(x) = mx + b, where x = {x}, b = {b} and m = {m}, the result is {Math.LinearFunction(x, b, m)}");
-
-            Console.WriteLine();
-            // task 2
-            var set = new Set(new[] { (1, 2), (3, 6), (4, 8) });
-            Console.WriteLine($"For set {set}, the domain is {set.GetDomain()} and the range is {set.GetRange()}");
-
-            Console.WriteLine();
-            // task 3
-            set.ReplaceElements(new[] { (-1, 1), (0, 0), (1, 1) });
-            Console.WriteLine($"Set of ordered pairs {set} is {set.CheckParity()}");
-
-            Console.WriteLine();
-            // task 4
-            set.ReplaceElements(new[] { (2, 4), (3, 6), (4, 8) });
-            Console.WriteLine($"Set of ordered pairs {set} is injective => {set.IsInjective()}");
-
-            Console.WriteLine();
-            // task 5
-            set.ReplaceElements(new[] { (1, 2), (2, 3), (3, 4) });
-            Console.WriteLine($"Set of ordered pairs {set} is surjective => {set.IsInjective()}");
-
-            Console.WriteLine();
-            // task 6
-            var F = (double x) => x * x;
-            var G = (double x) => 2 * x + 1;
-            var operation = Math.Operation.Addition;
-            x = 3;
-            var result = Math.FunctionCombiner(F, G, operation, x);
-            Console.WriteLine($"By adding function f(x) and g(x), where f(x) = x^2 and g(x) = 2x + 1, for value of x = {x}, we get {result}");
-
-            Console.WriteLine();
-            // task 7
-            var points = new (double, double)[] { (-2, -4), (-1, -1), (0, 2), (1, 1), (2, 4) };
-
-            var graphInfo = Math.GraphInformationExtractor(points);
-            Console.WriteLine($"From points {points} we get:");
-            Console.WriteLine(graphInfo);
-        }
+        var relation = new HashSet<ValueTuple<object, object>> { (1, 2), (3, 4), (5, 6) };
+        var reverse = Laboratory.Math.ReverseRelation(relation);
+        Console.WriteLine(string.Join(", ", reverse));
     }
 }
-

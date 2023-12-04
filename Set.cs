@@ -367,7 +367,9 @@ namespace Laboratory
                 foreach (var pair in _elements)
                 {
                     var pairFields = pair.GetType().GetFields();
+#pragma warning disable CS8604 // Possible null reference argument.
                     domain.AddElement(pairFields[0].GetValue(pair));
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 return domain;
             }
@@ -384,7 +386,9 @@ namespace Laboratory
                 foreach (var pair in _elements)
                 {
                     var pairFields = pair.GetType().GetFields();
+#pragma warning disable CS8604 // Possible null reference argument.
                     range.AddElement(pairFields[1].GetValue(pair));
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 return range;
             }
@@ -455,6 +459,7 @@ namespace Laboratory
                     var x = pairFields[0].GetValue(pair);
                     var y = pairFields[1].GetValue(pair);
 
+#pragma warning disable CS8604 // Possible null reference argument.
                     if (map.ContainsKey(x))
                     {
                         return false;
@@ -467,6 +472,7 @@ namespace Laboratory
                         }
                         map.Add(x, y);
                     }
+#pragma warning restore CS8604 // Possible null reference argument.
                 }
                 return true;
             }
@@ -487,6 +493,7 @@ namespace Laboratory
                     var x = pairFields[0].GetValue(pair);
                     var y = pairFields[1].GetValue(pair);
 
+#pragma warning disable CS8604 // Possible null reference argument.
                     if (map.ContainsKey(x))
                     {
                         return false;
@@ -498,6 +505,46 @@ namespace Laboratory
                             return false;
                         }
                         map.Add(x, y);
+                    }
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsSurjective(Set codomain)
+        {
+            if (IsSetOfOrderedPairs())
+            {
+                var map = new Dictionary<object, List<object>>();
+                foreach (var pair in _elements)
+                {
+                    var pairFields = pair.GetType().GetFields();
+                    var x = pairFields[0].GetValue(pair);
+                    var y = pairFields[1].GetValue(pair);
+
+#pragma warning disable CS8604 // Possible null reference argument.
+                    if (map.ContainsKey(x))
+                    {
+                        map[x].Add(y);
+                    }
+                    else
+                    {
+                        map.Add(x, new List<object>() { y });
+                    }
+#pragma warning restore CS8604 // Possible null reference argument.
+                }
+
+                var range =  map.Values.SelectMany(list => list).ToList();
+                foreach (var value in codomain._elements)
+                {
+                    if (!range.Contains(value))
+                    {
+                        return false;
                     }
                 }
                 return true;
