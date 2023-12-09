@@ -270,13 +270,89 @@ Hard Tasks (90-100 points)
             •	Inverse Relation: {(2, 1), (4, 3), (6, 5)}
 
  */
+/*
+Lab #7: "Relations"
+Easy Tasks (60-74 points)
+    Task 1: Degree Calculator: Write a program that calculates the degree of each vertex in a graph
+        •	Input Example:
+            •	Graph: Vertices = {A, B, C}, Edges = {(A, B), (B, C), (C, A)}
+        •	Output Example:
+            •	Degree of A: 2
+            •	Degree of B: 2
+            •	Degree of C: 2
+    Task 2: Adjacency Matrix Builder: Implement a program to create the adjacency matrix of a graph
+        •	Input Example:
+            •	Graph: Vertices = {1, 2, 3}, Edges = {(1, 2), (2, 3)}
+        •	Output Example:
+            •	Adjacency Matrix: [0, 1, 0]
+                                  [1, 0, 1]
+                                  [0, 1, 0]
+    Task 3: Path Finder: Create a program to find a path between two vertices in a graph
+        •	Objective: 
+            •	Input Example:
+            •	Graph: Vertices = {1, 2, 3, 4}, Edges = {(1, 2), (2, 3), (3, 4)}
+            •	Start Vertex: 1
+            •	End Vertex: 4
+        •	Output Example:
+            •	Path: 1 -> 2 -> 3 -> 4
+
+Medium Tasks (75-89 points)
+    Task 4: Subgraph Identifier: Write a program that determines if a given graph is a subgraph of another
+        •	Input Example:
+            •	Main Graph: Vertices = {A, B, C, D}, Edges = {(A, B), (B, C), (C, D)}
+            •	Subgraph: Vertices = {B, C}, Edges = {(B, C)}
+        •	Output Example:
+            •	Is Subgraph: True
+    Task 5: Sum of Degrees Checker: Implement a program to verify the Sum of Degrees of Vertices Theorem in a graph
+    •	Input Example:
+        •	Graph: Vertices = {1, 2, 3, 4}, Edges = {(1, 2), (2, 3), (3, 4), (4, 1)}
+    •	Output Example:
+        •	Sum of Degrees: 8 (which is twice the number of edges)
+        •	Theorem Verified: True
+    Task 6: Incidence Matrix Generator: Create a program that generates the incidence matrix of a graph
+    •	Input Example:
+        •	Graph: Vertices = {A, B, C}, Edges = {(A, B), (B, C)}
+    •	Output Example:
+        •	Incidence Matrix: [1, 0]
+                              [1, 1]
+                              [0, 1]
+Hard Tasks (90-100 points)
+    Task 7: Graph Isomorphism Tester: Write a program that tests if two graphs are isomorphic
+    •	Input Example:
+        •	Graph 1: Vertices = {1, 2, 3}, Edges = {(1, 2), (2, 3)}
+        •	Graph 2: Vertices = {A, B, C}, Edges = {(A, B), (B, C)}
+    •	Output Example:
+        •	Are Isomorphic: True
+    Task 8: Circuit Finder: Implement a program to find a circuit in a graph
+    •	Input Example:
+        •	Graph: Vertices = {A, B, C, D}, Edges = {(A, B), (B, C), (C, D), (D, A)}
+    •	Output Example:
+        •	Circuit: A -> B -> C -> D -> A
+    Task 9: Walks and Trails Analyzer: Create a program that identifies all possible walks and trails between two vertices in a graph
+    •	Input Example:
+        •	Graph: Vertices = {1, 2, 3, 4}, Edges = {(1, 2), (2, 3), (3, 1), (3, 4)}
+        •	Start Vertex: 1
+        •	End Vertex: 4
+    •	Output Example:
+        •	Walks: 1 -> 2 -> 3 -> 4, 1 -> 3 -> 2 -> 3
+ */
 
 class Program
 {
     static void Main()
     {
-        var relation = new HashSet<ValueTuple<object, object>> { (1, 2), (3, 4), (5, 6) };
-        var reverse = Laboratory.Math.ReverseRelation(relation);
-        Console.WriteLine(string.Join(", ", reverse));
+        var vartices = new HashSet<object>() { 'A', 'B', 'C' };
+        var edges = new HashSet<ValueTuple<object, object>>() { ('A', 'B'), ('B', 'C'), ('C', 'A') };
+        var graph = new Laboratory.DiscreteMath.Graph(vartices, edges);
+        Console.WriteLine(graph.ToString() + '\n');
+
+        var verticesDegrees = graph.GetVerticesDegrees();
+        Console.WriteLine("Dictonary of Degrees:");
+        Console.WriteLine(string.Join("\n", verticesDegrees.Select(pair => $"{pair.Key}: {pair.Value}")));
+        Console.WriteLine();
+        Console.WriteLine("Adjacency Matrix:");
+        var adjacencyMatrix = graph.GetAdjacencyMatrix();
+        Console.WriteLine(string.Join("\n", adjacencyMatrix.Select(row => string.Join(", ", row))));
+
     }
 }

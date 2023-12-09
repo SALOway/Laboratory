@@ -1,4 +1,7 @@
-﻿namespace Laboratory
+﻿using System.ComponentModel;
+using System.Linq;
+
+namespace Laboratory
 {
     namespace DiscreteMath
     {
@@ -455,6 +458,193 @@
                 }
             }
         }
+
+        public class Graph
+        {
+            private Dictionary<object, List<object>> _graph = new();
+            public int VerticesCount { get =>  _graph.Count; }
+
+            public Graph(HashSet<object> vertices, HashSet<ValueTuple<object, object>> edges) 
+            {
+                foreach (var vertex in vertices)
+                {
+                    _graph[vertex] = new List<object>();
+                }
+                foreach (var edge in edges)
+                {
+                    AddEdge(edge.Item1, edge.Item2);
+                }
+                foreach (var vertex in _graph.Keys)
+                {
+                    Console.WriteLine($"{vertex}: {{ {string.Join(", ", _graph[vertex])} }}");
+                }
+            }
+
+            public void AddEdge(object origin, object destination)
+            {
+                AddVertex(origin);
+                _graph[origin].Add(destination);
+
+                // For the undirected graph - add the reverse edge as well
+                // AddVertex(destination);
+                // graph[destination].Add(source);
+            }
+            public void AddVertex(object vertex)
+            {
+                if (!_graph.ContainsKey(vertex))
+                {
+                    _graph[vertex] = new List<object>();
+                }
+            }
+
+            #region Task 1
+            // Degree Calculator: Write a program that calculates the degree of each vertex in a graph
+            public Dictionary<object, int> GetVerticesDegrees()
+            {
+                var degrees = new Dictionary<object, int>();
+                foreach (var vertex in _graph.Keys)
+                {
+                    var degree = _graph[vertex].Count; // Out-degree
+
+                    foreach (var otherVertex in _graph.Keys)
+                    {
+                        if (otherVertex.Equals(vertex))
+                        {
+                            continue;
+                        }
+                        else if (_graph[otherVertex].Contains(vertex))
+                        {
+                            degree++; // In-degree
+                        }
+                    }
+                    degrees[vertex] = degree;
+                }
+                return degrees;
+            }
+            #endregion
+
+            #region Task 2
+            // Adjacency Matrix Builder: Implement a program to create the adjacency matrix of a graph
+            public int[][] GetAdjacencyMatrix()
+            {
+                int[][] matrix = new int[VerticesCount][];
+
+                for (int i = 0; i < VerticesCount; i++)
+                {
+                    matrix[i] = Enumerable.Repeat(0, VerticesCount).ToArray();
+                }
+
+                var vertices = new List<object>(_graph.Keys);
+                for (int i = 0; i < VerticesCount; i++)
+                {
+                    for (int j = 0; j < VerticesCount; j++)
+                    {
+                        object vertex1 = vertices[i];
+                        object vertex2 = vertices[j];
+
+                        if (_graph[vertex1].Contains(vertex2))
+                        {
+                            matrix[i][j] += 1;
+                            matrix[j][i] += 1;
+                        }
+                    }
+                }
+                return matrix;
+            }
+            #endregion
+
+            #region Task 3
+            // Path Finder: Create a program to find a path between two vertices in a graph
+            public Path FindPath(object startVertex, object endVertex)
+            {
+                #region Input Validation
+                if (startVertex is null || !_graph.ContainsKey(startVertex))
+                {
+                    throw new ArgumentException($"Given start vertex doesn't exist in a graph");
+                }
+                if (endVertex is null || !_graph.ContainsKey(endVertex))
+                {
+                    throw new ArgumentException($"Given end vertex doesn't exist in a graph");
+                }
+                #endregion
+
+                if (VerticesCount != 0)
+                {
+                    var visited = new HashSet<object>();
+                    var stack = new Stack<object>();
+
+                    stack.Push(startVertex);
+
+                    while (stack.Count > 0)
+                    {
+                        object currentNode = stack.Pop();
+                        if (!visited.Contains(currentNode))
+                        {
+                            Console.WriteLine(currentNode);
+                            visited.Add(currentNode);
+                            foreach (object neighbor in _graph[currentNode])
+                            {
+                                if (!visited.Contains(neighbor))
+                                {
+                                    stack.Push(neighbor);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // No path found
+                return new Path();
+            }
+
+            #endregion
+            public override string ToString()
+            {
+                var result = "";
+                result += $"Graph Vertices: {{ {string.Join(", ", _graph.Keys)} }}\n";
+                var edges = _graph.SelectMany(pair => pair.Value.Select(neighbor => (pair.Key, neighbor)));
+                result += $"Graph Edges: {{ {string.Join(", ", edges.Select(edge => $"{edge}"))} }}";
+                return result;
+            }
+
+            public class Path
+            {
+                private Queue<object> _verticesQueue;
+
+                public Path()
+                {
+                    _verticesQueue = new Queue<object>();
+                }
+                public Path(Queue<object> verticesQueue)
+                {
+                    _verticesQueue = verticesQueue;
+                }
+
+                public void AddNext(object vertex)
+                {
+                    _verticesQueue.Enqueue(vertex);
+                }
+
+                public void RemovePrevious()
+                {
+                    _verticesQueue.Dequeue();
+                }
+
+                public override string ToString()
+                {
+                    var result = "";
+                    if (_verticesQueue.Count > 1)
+                    {
+                        result = string.Join(" ➔ ", _verticesQueue.ToArray());
+                    }
+                    else
+                    {
+                        result = "NaP"; // Not a Path
+                    }
+                    return result;
+                }
+            }
+        }
     }
     static class Math
     {
@@ -506,7 +696,13 @@
         static public int LCM(int a, int b) => a * b / GCD(a, b);
         static public HashSet<object> Union(params HashSet<object>[] sets)
         {
-            if (sets.Length < 1) throw new NullReferenceException("The parameters array must have at least one element");
+            #region Input Validation
+            if (sets.Length < 1)
+            {
+                throw new NullReferenceException("The parameters array must have at least one element");
+            }
+            #endregion
+            
             var result = new HashSet<object>(sets[0]);
             for (int i = 1; i < sets.Length; i++)
             {
@@ -516,7 +712,12 @@
         }
         static public HashSet<object> Intersection(params HashSet<object>[] sets)
         {
-            if (sets.Length < 1) throw new NullReferenceException("The parameters array must have at least one element");
+            #region Input Validation
+            if (sets.Length < 1)
+            {
+                throw new NullReferenceException("The parameters array must have at least one element");
+            }
+            #endregion
             var result = new HashSet<object>(sets[0]);
             for (int i = 1; i < sets.Length; i++)
             {
@@ -526,7 +727,12 @@
         }
         static public HashSet<object> Difference(params HashSet<object>[] sets)
         {
-            if (sets.Length < 1) throw new NullReferenceException("The parameters array must have at least one element");
+            #region Input Validation
+            if (sets.Length < 1)
+            {
+                throw new NullReferenceException("The parameters array must have at least one element");
+            }
+            #endregion
             var result = new HashSet<object>(sets[0]);
             for (int i = 1; i < sets.Length; i++)
             {
@@ -582,7 +788,9 @@
             {
                 foreach (var pair2 in relationSet)
                 {
-                    if (pair1.Item2.Equals(pair2.Item1))
+                    // pair1 = (1, 2)
+                    // pair2 = (2, 1)
+                    if (pair1.Item2.Equals(pair2.Item1) && !pair2.Item2.Equals(pair1.Item1))
                     {
                         ValueTuple<object, object> intermediatePair = (pair1.Item1, pair2.Item2);
                         if (!relationSet.Contains(intermediatePair))
@@ -594,7 +802,7 @@
             }
             return true;
         }
-        static public bool IsEquivalenceRelation(HashSet<object> set, HashSet<ValueTuple<object, object>> relationSet)
+        static public bool IsRelationEquivalent(HashSet<object> set, HashSet<ValueTuple<object, object>> relationSet)
         {
             return IsRelationReflexive(set, relationSet) && IsRelationSymmertic(relationSet) && IsRelationTransitive(relationSet);
         }
