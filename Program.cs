@@ -337,22 +337,111 @@ Hard Tasks (90-100 points)
         •	Walks: 1 -> 2 -> 3 -> 4, 1 -> 3 -> 2 -> 3
  */
 
+using Laboratory.DiscreteMath;
+
 class Program
 {
     static void Main()
     {
-        var vartices = new HashSet<object>() { 'A', 'B', 'C' };
-        var edges = new HashSet<ValueTuple<object, object>>() { ('A', 'B'), ('B', 'C'), ('C', 'A') };
-        var graph = new Laboratory.DiscreteMath.Graph(vartices, edges);
-        Console.WriteLine(graph.ToString() + '\n');
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+        // Demo();
+        // IsomorphismDemo();
+        // CircuitsDemo();
+    }
+
+    static void Demo()
+    {
+        var vartices = new HashSet<object>() { 'A', 'B', 'C', 'D' };
+        var edges = new HashSet<ValueTuple<object, object>>() { ('A', 'B'), ('B', 'C'), ('C', 'D') };
+        var graph = new Graph(vartices, edges);
+
+        Console.WriteLine("___Input___");
+        Console.WriteLine($"Main Graph:\n{graph}\n");
 
         var verticesDegrees = graph.GetVerticesDegrees();
-        Console.WriteLine("Dictonary of Degrees:");
+        Console.WriteLine("___Task 1___");
+        Console.WriteLine("Dictonary of Main Graph Degrees:");
         Console.WriteLine(string.Join("\n", verticesDegrees.Select(pair => $"{pair.Key}: {pair.Value}")));
-        Console.WriteLine();
-        Console.WriteLine("Adjacency Matrix:");
-        var adjacencyMatrix = graph.GetAdjacencyMatrix();
-        Console.WriteLine(string.Join("\n", adjacencyMatrix.Select(row => string.Join(", ", row))));
+        Console.WriteLine($"Sum of the vertices degrees: {verticesDegrees.Values.Sum()}\n");
 
+        var adjacencyMatrix = graph.GetAdjacencyMatrix();
+        Console.WriteLine("___Task 2___");
+        Console.WriteLine("Main Graph Adjacency Matrix:");
+        Console.WriteLine(string.Join("\n", adjacencyMatrix.Select(row => string.Join(", ", row))) + '\n');
+
+        var start = 'A';
+        var end = 'C';
+        var path = graph.FindPath(start, end);
+        Console.WriteLine("___Task 3___");
+        Console.WriteLine($"Main Graph Path from {start} to {end}:");
+        Console.WriteLine(path);
+
+        var subvartices = new HashSet<object>() { 'B', 'D' };
+        var subedges = new HashSet<ValueTuple<object, object>>() { ('B', 'D') };
+        var subgraph = new Graph(subvartices, subedges);
+        Console.WriteLine("___Task 4___");
+        Console.WriteLine($"\nSecondary Graph \n{subgraph}\n");
+        Console.WriteLine("Is Secondary Graph subgraph of Main Graph?");
+        Console.WriteLine(subgraph.IsSubgraphOf(graph));
+
+        var isSumOfDegreesTheoremTrue = Graph.CheckSumOfDegreesTheorem(graph);
+        Console.WriteLine("___Task 5___");
+        Console.WriteLine($"Amount of Main Graph edges is {edges.Count}");
+        Console.WriteLine($"Sum of Degrees of Vertices Theorem statets that Sum of Degrees for Main Graph should be equal to {edges.Count * 2}");
+        Console.WriteLine($"Is this true?: {isSumOfDegreesTheoremTrue}");
+
+        var incidenceMatrix = graph.GetIncidenceMatrix();
+        Console.WriteLine("___Task 6___");
+        Console.WriteLine("The incidence matrix of Main Graph:");
+        Console.WriteLine(string.Join("\n", incidenceMatrix.Select(row => string.Join(", ", row))) + '\n');
+
+        IsomorphismDemo();
+        // CircuitsDemo();
+    }
+
+    private static void IsomorphismDemo()
+    {
+        var vartices1 = new HashSet<object>() { 0, 1, 2, 3, 4 };
+        var edges1 = new HashSet<ValueTuple<object, object>>() { (0, 1), (0, 2), (1, 0), (1, 2), (2, 3), (2, 4), (3, 4) };
+        var graph1 = new Graph(vartices1, edges1);
+
+        var vartices2 = new HashSet<object>() { 9, 8, 7, 5, 6 };
+        var edges2 = new HashSet<ValueTuple<object, object>>() { (6, 5), (6, 7), (5, 6), (5, 7), (7, 8), (7, 9), (8, 9) };
+        var graph2 = new Graph(vartices2, edges2);
+
+        Console.WriteLine("___Task 7___");
+
+        Console.WriteLine("Graph G_1");
+        Console.WriteLine(graph1.ToString() + '\n');
+        Console.WriteLine("Adjacency Matrix of G_1:");
+        Console.WriteLine($"{string.Join("\n", graph1.GetAdjacencyMatrix().Select(row => string.Join(", ", row)))}\n");
+
+        Console.WriteLine("Graph G_2");
+        Console.WriteLine(graph2.ToString() + '\n');
+        Console.WriteLine("Adjacency Matrix of G_2:");
+        Console.WriteLine($"{string.Join("\n", graph2.GetAdjacencyMatrix().Select(row => string.Join(", ", row)))}\n");
+
+        Console.WriteLine("Are G_1 and G_2 isomorphic?");
+        Console.WriteLine(Graph.AreIsomorphic(graph1, graph2));
+    }
+
+    private static void CircuitsDemo()
+    {
+        // Graph: Vertices = {A, B, C, D}, Edges = { (A, B), (B, C), (C, D), (D, A) }
+        // A -> B -> C -> D -> A
+        var vartices = new HashSet<object>() { 'A', 'B', 'C', 'D' };
+        var edges = new HashSet<ValueTuple<object, object>>() { ('A', 'B'), ('B', 'C'), ('C', 'A'), ('C', 'D'), ('D', 'A'), ('D', 'D'), ('A', 'D') };
+        var graph = new Graph(vartices, edges);
+
+        Console.WriteLine("___Task 8___");
+
+        Console.WriteLine("Graph C_1");
+        Console.WriteLine(graph.ToString() + '\n');
+        Console.WriteLine("Adjacency Matrix of C_1:");
+        Console.WriteLine($"{string.Join("\n", graph.GetAdjacencyMatrix().Select(row => string.Join(", ", row)))}\n");
+
+        var circuits = graph.FindCircuit();
+        Console.WriteLine("Circuits of Graph C_1");
+        Console.WriteLine(string.Join(", ", circuits));
     }
 }

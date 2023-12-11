@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 
 namespace Laboratory
@@ -461,7 +462,7 @@ namespace Laboratory
 
         public class Graph
         {
-            private Dictionary<object, List<object>> _graph = new();
+            private Dictionary<object, List<object>> _graph = new(); // something like adjacency list?
             public int VerticesCount { get =>  _graph.Count; }
 
             public Graph(HashSet<object> vertices, HashSet<ValueTuple<object, object>> edges) 
@@ -474,20 +475,12 @@ namespace Laboratory
                 {
                     AddEdge(edge.Item1, edge.Item2);
                 }
-                foreach (var vertex in _graph.Keys)
-                {
-                    Console.WriteLine($"{vertex}: {{ {string.Join(", ", _graph[vertex])} }}");
-                }
             }
 
             public void AddEdge(object origin, object destination)
             {
                 AddVertex(origin);
                 _graph[origin].Add(destination);
-
-                // For the undirected graph - add the reverse edge as well
-                // AddVertex(destination);
-                // graph[destination].Add(source);
             }
             public void AddVertex(object vertex)
             {
@@ -496,9 +489,13 @@ namespace Laboratory
                     _graph[vertex] = new List<object>();
                 }
             }
+            public HashSet<(object, object)> GetEdges()
+            {
+                return _graph.SelectMany(pair => pair.Value.Select(neighbor => (pair.Key, neighbor))).ToHashSet();
+            }
 
-            #region Task 1
-            // Degree Calculator: Write a program that calculates the degree of each vertex in a graph
+            #region Task 1 Degree Calculator
+            // Write a program that calculates the degree of each vertex in a graph
             public Dictionary<object, int> GetVerticesDegrees()
             {
                 var degrees = new Dictionary<object, int>();
@@ -523,12 +520,11 @@ namespace Laboratory
             }
             #endregion
 
-            #region Task 2
-            // Adjacency Matrix Builder: Implement a program to create the adjacency matrix of a graph
+            #region Task 2 Adjacency Matrix Builder
+            // Implement a program to create the adjacency matrix of a graph
             public int[][] GetAdjacencyMatrix()
             {
-                int[][] matrix = new int[VerticesCount][];
-
+                var matrix = new int[VerticesCount][];
                 for (int i = 0; i < VerticesCount; i++)
                 {
                     matrix[i] = Enumerable.Repeat(0, VerticesCount).ToArray();
@@ -539,8 +535,8 @@ namespace Laboratory
                 {
                     for (int j = 0; j < VerticesCount; j++)
                     {
-                        object vertex1 = vertices[i];
-                        object vertex2 = vertices[j];
+                        var vertex1 = vertices[i];
+                        var vertex2 = vertices[j];
 
                         if (_graph[vertex1].Contains(vertex2))
                         {
@@ -553,49 +549,206 @@ namespace Laboratory
             }
             #endregion
 
-            #region Task 3
-            // Path Finder: Create a program to find a path between two vertices in a graph
-            public Path FindPath(object startVertex, object endVertex)
+            #region Task 3 Path Finder
+            // Create a program to find a path between two vertices in a graph
+            public Path FindPath(object startVertex, object endVertex) // using BFS
             {
-                #region Input Validation
-                if (startVertex is null || !_graph.ContainsKey(startVertex))
-                {
-                    throw new ArgumentException($"Given start vertex doesn't exist in a graph");
-                }
-                if (endVertex is null || !_graph.ContainsKey(endVertex))
-                {
-                    throw new ArgumentException($"Given end vertex doesn't exist in a graph");
-                }
-                #endregion
+                var visited = new HashSet<object>(); // store visited nodes
+                var stack = new Stack<object>(); // store nodes to visit
+                var predecessor = new Dictionary<object, object?>(); // destination-origin pairs
 
-                if (VerticesCount != 0)
+                stack.Push(startVertex);
+                visited.Add(startVertex);
+                predecessor[startVertex] = null;
+
+                while (stack.Count > 0)
                 {
-                    var visited = new HashSet<object>();
-                    var stack = new Stack<object>();
+                    object currentVertex = stack.Pop();
 
-                    stack.Push(startVertex);
-
-                    while (stack.Count > 0)
+                    if (currentVertex.Equals(endVertex))
                     {
-                        object currentNode = stack.Pop();
-                        if (!visited.Contains(currentNode))
+                        return ReconstructPath(predecessor, endVertex);
+                    }
+
+                    foreach ((object origin, object direction) in GetEdges().Where(edge => edge.Item1.Equals(currentVertex) || edge.Item2.Equals(currentVertex)))
+                    {
+                        var neighbor = origin.Equals(currentVertex) ? direction : origin;
+                        if (!visited.Contains(neighbor))
                         {
-                            Console.WriteLine(currentNode);
-                            visited.Add(currentNode);
-                            foreach (object neighbor in _graph[currentNode])
-                            {
-                                if (!visited.Contains(neighbor))
-                                {
-                                    stack.Push(neighbor);
-                                }
-                            }
+                            stack.Push(neighbor);
+                            visited.Add(neighbor);
+                            predecessor[neighbor] = currentVertex;
+                        }
+                    }
+                }
+                return Path.Empty;
+            }
+
+            private Path ReconstructPath(Dictionary<object, object?> predecessor, object endVertex)
+            {
+                var path = new List<object>();
+                var currentVertex = endVertex;
+
+                while (currentVertex != null)
+                {
+                    path.Insert(0, currentVertex);
+                    currentVertex = predecessor[currentVertex];
+                }
+
+                return new Path(path);
+            }
+
+            #endregion
+
+            #region Task 4 Subgraph Identifier
+            // Write a program that determines if a given graph is a subgraph of another
+            public bool IsSubgraphOf(Graph other)
+            {
+                var isSubgraph = true;
+                foreach (var origin in _graph.Keys)
+                {
+                    if (!other._graph.ContainsKey(origin))
+                    {
+                        isSubgraph = false;
+                        break;
+                    }
+                    else if (_graph[origin].Any(destination => !other._graph[origin].Contains(destination)))
+                    {
+                        // if subgraph's destinations from vertex-destinations doesn't exist in main graph, then this graph isn't subgraph
+                        isSubgraph = false;
+                        break;
+                    }
+                }
+                return isSubgraph;
+            }
+            #endregion
+
+            #region Task 5 Sum of Degrees Checker
+            // Implement a program to verify the Sum of Degrees of Vertices Theorem in a graph
+            public static bool CheckSumOfDegreesTheorem(Graph graph)
+            {
+                var edges = graph.GetEdges();
+                var sumOfDegrees = edges.Count * 2;
+                return sumOfDegrees == graph.GetVerticesDegrees().Values.Sum();
+            }
+            #endregion
+
+            #region Task 6 Incidence Matrix Generator
+            // Create a program that generates the incidence matrix of a graph
+            public int[][] GetIncidenceMatrix()
+            {
+                var edges = GetEdges();
+                var matrix = new int[VerticesCount][];
+                for (int i = 0; i < VerticesCount; i++)
+                {
+                    matrix[i] = Enumerable.Repeat(0, edges.Count).ToArray();
+                }
+
+                var vertices = new List<object>(_graph.Keys);
+                for (int i = 0; i < edges.Count; i++)
+                {
+                    var edge = edges.ElementAt(i);
+                    for (int j = 0; j < VerticesCount; j++)
+                    {
+                        var vertex = vertices[j];
+
+                        if (edge.Item1.Equals(vertex))
+                        {
+                            matrix[j][i] += 1;
+                        }
+                        if (edge.Item2.Equals(vertex))
+                        {
+                            matrix[j][i] += 1;
+                        }
+                    }
+                }
+                return matrix;
+            }
+            #endregion
+
+            #region Task 7 Graph Isomorphism Tester
+            // Write a program that tests if two graphs are isomorphic
+            public static bool AreIsomorphic(Graph first, Graph second)
+            {
+                if (first.VerticesCount != second.VerticesCount || first.GetEdges().Count != second.GetEdges().Count)
+                {
+                    return false;
+                }
+                var areIsomorphic = true;
+                var secondAdjacencyMatrix = second.GetAdjacencyMatrix();
+                foreach (var row in first.GetAdjacencyMatrix())
+                {
+                    // check isomorphism by comparing the sum of the adjacency rows
+                    var foundMatchingRow = false;
+                    for (int i = 0; i < secondAdjacencyMatrix.Length; i++)
+                    {
+                        if (row.Sum() == secondAdjacencyMatrix[i].Sum())
+                        {
+                            secondAdjacencyMatrix = secondAdjacencyMatrix.Where((r, index) => index != i).ToArray(); // remove row at
+                            foundMatchingRow = true;
+                            break;
+                        }
+                    }
+                    if (!foundMatchingRow)
+                    {
+                        areIsomorphic = false;
+                        break;
+                    }
+                }
+                return areIsomorphic;
+            }
+            #endregion
+
+            #region Task 8 Circuit Finder
+            // Implement a program to find a circuit in a graph
+            public Path FindCircuit()
+            {
+                var edges = GetEdges();
+                var predecessor = new Dictionary<object, object>();
+                foreach (var vertex in _graph.Keys)
+                {
+                    foreach (var edge in edges.Where(edge => (edge.Item1.Equals(vertex) || edge.Item2.Equals(vertex)) && !edge.Item1.Equals(edge.Item2) && !predecessor.ContainsKey(edge.Item1)))
+                    {
+                        if (!predecessor.ContainsKey(edge.Item1))
+                        {
+                            predecessor.Add(edge.Item1, edge.Item2);
                         }
                     }
                 }
 
-                // No path found
-                return new Path();
+                foreach (var startVertex in _graph.Keys)
+                {
+                    if (!predecessor.ContainsKey(startVertex))
+                    {
+                        continue;
+                    }
+                    var nextVertex = predecessor[startVertex];
+                    while (!nextVertex.Equals(startVertex))
+                    {
+                        if (!predecessor.ContainsKey(nextVertex))
+                        {
+                            break;
+                        }
+                        nextVertex = predecessor[nextVertex];
+                    }
+                    var path = new List<object>() { startVertex };
+                    var currentVertex = predecessor[startVertex];
+
+                    while (!currentVertex.Equals(startVertex))
+                    {
+                        path.Add(currentVertex);
+                        currentVertex = predecessor[currentVertex];
+                    }
+                    path.Add(startVertex);
+
+                    return new Path(path);
+                }
+                return Path.Empty;
             }
+            #endregion
+
+            #region Task 9 Walks and Trails Analyzer
+            // Create a program that identifies all possible walks and trails between two vertices in a graph
 
             #endregion
             public override string ToString()
@@ -604,44 +757,75 @@ namespace Laboratory
                 result += $"Graph Vertices: {{ {string.Join(", ", _graph.Keys)} }}\n";
                 var edges = _graph.SelectMany(pair => pair.Value.Select(neighbor => (pair.Key, neighbor)));
                 result += $"Graph Edges: {{ {string.Join(", ", edges.Select(edge => $"{edge}"))} }}";
+                var dictonaryFormat = string.Join(",\n    ", _graph.Select(vertex => $"{vertex.Key}: {{ {string.Join(", ", vertex.Value)} }}"));
+                result += $"\nGraph origin-deestination relations:\n{{\n    {dictonaryFormat}\n}}";
                 return result;
             }
 
             public class Path
             {
-                private Queue<object> _verticesQueue;
+                public static Path Empty => new Path(new List<object>());
+                private List<object> _pathVertices;
+                private object? _start;
+                private object? _end;
 
-                public Path()
+                public Path(List<object> pathVertices)
                 {
-                    _verticesQueue = new Queue<object>();
-                }
-                public Path(Queue<object> verticesQueue)
-                {
-                    _verticesQueue = verticesQueue;
-                }
-
-                public void AddNext(object vertex)
-                {
-                    _verticesQueue.Enqueue(vertex);
-                }
-
-                public void RemovePrevious()
-                {
-                    _verticesQueue.Dequeue();
+                    _pathVertices = pathVertices;
+                    _start = _pathVertices.FirstOrDefault();
+                    _end = _pathVertices.LastOrDefault();
                 }
 
                 public override string ToString()
                 {
-                    var result = "";
-                    if (_verticesQueue.Count > 1)
+                    string result;
+                    if (_pathVertices.Count > 1)
                     {
-                        result = string.Join(" ➔ ", _verticesQueue.ToArray());
+                        result = string.Join(" → ", _pathVertices.ToArray());
+                    }
+                    else if (_start != null && _end != null)
+                    {
+                        result = $"Path from {_start} to {_end} doesn't exist";
                     }
                     else
                     {
-                        result = "NaP"; // Not a Path
+                        result = $"Some of vertices doesn't exist";
                     }
                     return result;
+                }
+                public static bool operator ==(Path left, Path right)
+                {
+                    return left.Equals(right);
+                }
+                public static bool operator !=(Path left, Path right)
+                {
+                    return !left.Equals(right);
+                }
+                public override bool Equals(object? obj)
+                {
+                    if (obj is Path)
+                    {
+                        var path = (Path)obj;
+                        var i = path._pathVertices.IndexOf(_pathVertices[0]);
+                        foreach (var vertex in _pathVertices)
+                        {
+                            var otherVertex = path._pathVertices[i];
+                            if (!otherVertex.Equals(vertex))
+                            {
+                                return false;
+                            }
+                            i += (i == path._pathVertices.Count - 1) ? -i : 1;
+                        }
+                        return true;
+                    }
+                    else
+                    {
+                        return base.Equals(obj);
+                    }
+                }
+                public override int GetHashCode()
+                {
+                    return base.GetHashCode();
                 }
             }
         }
